@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input"
 import { Trophy, Gamepad2, Zap } from "lucide-react"
 import { Spinner } from "@/components/ui/spinner"
 import { useToast } from "@/hooks/use-toast"
+import { signIn } from "@/lib/auth-client"
+import { auth } from "@/lib/auth"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -29,10 +31,37 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
     setIsLoading(true)
 
+
     try {
-      setTimeout(() => {
-        router.push("/admin/users")
-      }, 800)
+
+      await signIn.email(
+        {
+          email: data.email,
+          password: data.password
+        },
+        {
+          onRequest: (ctx) => {
+            setIsLoading(true);
+          },
+          onResponse: (ctx) => {
+            setIsLoading(false)
+          },
+          onError: (ctx) => {
+            toast({
+              title: "Erro de autenticação",
+              description: "Credenciais inválidas. Por favor, tente novamente.",
+              variant: "destructive",
+            })
+          },
+          onSuccess: (ctx) => {
+            toast({
+              title: "Login bem-sucedido",
+              description: "Você foi autenticado com sucesso!",
+            })
+            router.push("/admin/users")
+          }
+        },
+      );
     } catch (error) {
       console.error("[v0] Erro ao fazer login:", error)
       toast({
@@ -41,9 +70,7 @@ export default function LoginPage() {
         variant: "destructive",
       })
     } finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 800)
+      setIsLoading(false)
     }
   }
 
@@ -82,7 +109,7 @@ export default function LoginPage() {
         {/* Login form card */}
         <div className="glass-card rounded-2xl shadow-2xl p-8 border-2">
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">Acesso Administrativo</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-2">Acesso</h2>
             <p className="text-muted-foreground text-sm">Entre com suas credenciais para continuar</p>
           </div>
 

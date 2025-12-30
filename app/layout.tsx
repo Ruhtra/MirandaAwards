@@ -11,6 +11,7 @@ import {
   IBM_Plex_Mono as V0_Font_IBM_Plex_Mono,
   Lora as V0_Font_Lora,
 } from "next/font/google"
+import { Toaster } from "@/components/ui/toaster"
 
 // Initialize fonts
 const _plusJakartaSans = V0_Font_Plus_Jakarta_Sans({
@@ -56,6 +57,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <QueryProvider>{children}</QueryProvider>
+          <Toaster />
         </ThemeProvider>
         <Analytics />
       </body>

@@ -2,7 +2,7 @@ export type UserRole = "USER" | "ADMIN"
 
 export interface User {
   id: string
-  name: string | null
+  name: string
   email: string
   password: string
   role: UserRole

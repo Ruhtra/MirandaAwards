@@ -13,8 +13,8 @@ export default function AdminLayout({
       <DesktopNav />
 
       {/* Main Content Area */}
-      <main className="pt-16 md:pt-20 pb-20 md:pb-8 px-4 md:px-6 lg:px-8">
-        <div className="container mx-auto max-w-7xl">{children}</div>
+      <main className="pt-3 md:pt-20 pb-20 md:pb-8 px-4 md:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">{children}</div>
       </main>
 
       {/* Mobile Navigation */}

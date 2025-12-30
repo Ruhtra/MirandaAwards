@@ -5,10 +5,15 @@ import { UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { UserList } from "./_components/user-list"
 import { UserSheet } from "./_components/user-sheet"
+import { PageHeader } from "./_components/page-header"
+import { UserFilters } from "./_components/user-filters"
 
 export default function UsersPage() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [editingUserId, setEditingUserId] = useState<string | null>(null)
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [roleFilter, setRoleFilter] = useState<string>("all")
 
   const handleCreateUser = () => {
     setEditingUserId(null)
@@ -26,25 +31,28 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Gerenciamento de Usuários
-          </h1>
-          <p className="text-muted-foreground mt-1">Gerencie usuários do sistema Miranda Awards</p>
-        </div>
-        <Button onClick={handleCreateUser} className="gap-2 glow-primary">
-          <UserPlus className="size-4" />
-          Novo Usuário
-        </Button>
-      </div>
 
-      {/* User List */}
-      <UserList onEditUser={handleEditUser} />
+    <div className="space-y-4">
+      <PageHeader
+        title="Usuários"
+        action={
+          <Button onClick={handleCreateUser} className="w-full md:w-auto gap-2">
+            <UserPlus className="size-4" />
+            <span className="md:inline">Novo Usuário</span>
+          </Button>
+        }
+      />
 
-      {/* Create/Edit Sheet */}
+      <UserFilters
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        roleFilter={roleFilter}
+        onRoleChange={setRoleFilter}
+      />
+
+      <UserList onEditUser={handleEditUser} searchQuery={searchQuery} roleFilter={roleFilter} />
+
+
       <UserSheet open={sheetOpen} onOpenChange={handleCloseSheet} userId={editingUserId} />
     </div>
   )

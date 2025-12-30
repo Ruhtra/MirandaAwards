@@ -6,18 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
-import { Spinner } from "@/components/ui/spinner"
 import { useToast } from "@/hooks/use-toast"
 import { DeleteUserDialog } from "./delete-user-dialog"
-import { useState } from "react"
+import { UserListSkeleton } from "./user-list-skeleton"
+import { useState, useMemo } from "react"
 import type { User } from "@/lib/types"
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 
 interface UserListProps {
   onEditUser: (userId: string) => void
+  searchQuery: string
+  roleFilter: string
 }
 
-export function UserList({ onEditUser }: UserListProps) {
+export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps) {
   const { toast } = useToast()
   const queryClient = useQueryClient()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -32,6 +34,23 @@ export function UserList({ onEditUser }: UserListProps) {
       return response.json()
     },
   })
+
+  const filteredUsers = useMemo(() => {
+    if (!users) return []
+
+    return users.filter((user) => {
+      // Search filter (name or email)
+      const matchesSearch = searchQuery
+        ? user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+        : true
+
+      // Role filter
+      const matchesRole = roleFilter === "all" ? true : user.role === roleFilter
+
+      return matchesSearch && matchesRole
+    })
+  }, [users, searchQuery, roleFilter])
 
   // Delete mutation
   const deleteMutation = useMutation({
@@ -72,17 +91,10 @@ export function UserList({ onEditUser }: UserListProps) {
   }
 
   if (isLoading) {
-    return (
-      <Card className="glass-card p-12">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <Spinner className="size-8 text-primary" />
-          <p className="text-muted-foreground">Carregando usuários...</p>
-        </div>
-      </Card>
-    )
+    return <UserListSkeleton />
   }
 
-  if (!users || users.length === 0) {
+  if (!filteredUsers || filteredUsers.length === 0) {
     return (
       <Card className="glass-card p-8">
         <Empty>
@@ -90,8 +102,14 @@ export function UserList({ onEditUser }: UserListProps) {
             <UserIcon className="size-12 text-muted-foreground" />
           </EmptyMedia>
           <EmptyHeader>
-            <EmptyTitle>Nenhum usuário cadastrado</EmptyTitle>
-            <EmptyDescription>Comece criando seu primeiro usuário do sistema</EmptyDescription>
+            <EmptyTitle>
+              {searchQuery || roleFilter !== "all" ? "Nenhum usuário encontrado" : "Nenhum usuário cadastrado"}
+            </EmptyTitle>
+            <EmptyDescription>
+              {searchQuery || roleFilter !== "all"
+                ? "Tente ajustar os filtros de busca"
+                : "Comece criando seu primeiro usuário do sistema"}
+            </EmptyDescription>
           </EmptyHeader>
         </Empty>
       </Card>
@@ -101,9 +119,9 @@ export function UserList({ onEditUser }: UserListProps) {
   return (
     <>
       <Card className="glass-card overflow-hidden">
-        <ScrollArea className="h-[calc(100vh-280px)] md:h-[calc(100vh-240px)]">
+        <ScrollArea className="h-[calc(100vh-300px)] md:h-[calc(100vh-320px)]">
           <div className="divide-y divide-border">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <div key={user.id} className="p-4 hover:bg-accent/30 transition-colors">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 space-y-3">

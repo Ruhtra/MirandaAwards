@@ -3,14 +3,25 @@ import type { Metadata } from "next"
 
 import { Analytics } from "@vercel/analytics/next"
 import { QueryProvider } from "@/lib/providers/query-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
-import { Plus_Jakarta_Sans as V0_Font_Plus_Jakarta_Sans, IBM_Plex_Mono as V0_Font_IBM_Plex_Mono, Lora as V0_Font_Lora } from 'next/font/google'
+import {
+  Plus_Jakarta_Sans as V0_Font_Plus_Jakarta_Sans,
+  IBM_Plex_Mono as V0_Font_IBM_Plex_Mono,
+  Lora as V0_Font_Lora,
+} from "next/font/google"
 
 // Initialize fonts
-const _plusJakartaSans = V0_Font_Plus_Jakarta_Sans({ subsets: ['latin'], weight: ["200","300","400","500","600","700","800"] })
-const _ibmPlexMono = V0_Font_IBM_Plex_Mono({ subsets: ['latin'], weight: ["100","200","300","400","500","600","700"] })
-const _lora = V0_Font_Lora({ subsets: ['latin'], weight: ["400","500","600","700"] })
+const _plusJakartaSans = V0_Font_Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+})
+const _ibmPlexMono = V0_Font_IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+})
+const _lora = V0_Font_Lora({ subsets: ["latin"], weight: ["400", "500", "600", "700"] })
 
 export const metadata: Metadata = {
   title: "Miranda Awards",
@@ -41,10 +52,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    // <CHANGE> Force dark mode for gaming aesthetic
-    <html lang="pt-BR" className="dark">
-      <body className={`font-sans antialiased`}>
-        <QueryProvider>{children}</QueryProvider>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={`font-sans antialiased`} suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

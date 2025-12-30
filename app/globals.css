@@ -4,46 +4,52 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* <CHANGE> Gaming-themed color palette with dark mode as base */
-  --background: #0a0b0f;
-  --foreground: #e8ecf2;
-  --card: #13141a;
-  --card-foreground: #e8ecf2;
-  --popover: #13141a;
-  --popover-foreground: #e8ecf2;
-  --primary: #00d9ff;
-  --primary-foreground: #0a0b0f;
-  --secondary: #1e2029;
-  --secondary-foreground: #e8ecf2;
-  --muted: #1a1c24;
-  --muted-foreground: #8b92a8;
-  --accent: #7b3ff2;
+  --background: #f5f7fa;
+  --foreground: #0f141e;
+
+  --card: #ffffff;
+  --card-foreground: #0f141e;
+  --popover: #ffffff;
+  --popover-foreground: #0f141e;
+
+  --primary: #0087cc;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef2f8;
+  --secondary-foreground: #0f141e;
+  --muted: #f0f3f9;
+  --muted-foreground: #5a6478;
+
+  --accent: #5a29e6;
   --accent-foreground: #ffffff;
-  --destructive: #ff3366;
+  --destructive: #e61e4d;
   --destructive-foreground: #ffffff;
-  --border: #2a2d3a;
-  --input: #1e2029;
-  --ring: #00d9ff;
-  --chart-1: #00d9ff;
-  --chart-2: #7b3ff2;
-  --chart-3: #ff3366;
-  --chart-4: #00ffa3;
-  --chart-5: #ffa500;
+
+  --border: #d1d9e9;
+  --input: #ffffff;
+  --ring: #0087cc;
+  --chart-1: #0087cc;
+  --chart-2: #5a29e6;
+  --chart-3: #e61e4d;
+  --chart-4: #00cc82;
+  --chart-5: #ff9500;
   --radius: 0.75rem;
-  --sidebar: #0d0e13;
-  --sidebar-foreground: #e8ecf2;
-  --sidebar-primary: #00d9ff;
-  --sidebar-primary-foreground: #0a0b0f;
-  --sidebar-accent: #1e2029;
-  --sidebar-accent-foreground: #00d9ff;
-  --sidebar-border: #2a2d3a;
-  --sidebar-ring: #00d9ff;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f141e;
+  --sidebar-primary: #0087cc;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eef2f8;
+  --sidebar-accent-foreground: #0087cc;
+  --sidebar-border: #d1d9e9;
+  --sidebar-ring: #0087cc;
+
   --shadow-x: 0px;
-  --shadow-y: 4px;
-  --shadow-blur: 16px;
+  --shadow-y: 2px;
+  --shadow-blur: 6px;
   --shadow-spread: 0px;
-  --shadow-opacity: 0.4;
-  --shadow-color: #00d9ff;
+  --shadow-opacity: 0.1;
+  --shadow-color: #1a202c;
 }
 
 .dark {
@@ -80,11 +86,11 @@
   --sidebar-border: #2a2d3a;
   --sidebar-ring: #00d9ff;
   --shadow-x: 0px;
-  --shadow-y: 4px;
-  --shadow-blur: 16px;
+  --shadow-y: 2px;
+  --shadow-blur: 6px;
   --shadow-spread: 0px;
-  --shadow-opacity: 0.4;
-  --shadow-color: #00d9ff;
+  --shadow-opacity: 0.1;
+  --shadow-color: #fff
 }
 
 @theme inline {
@@ -148,25 +154,26 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* <CHANGE> Add smooth scrolling and glassmorphism utilities */
   html {
     scroll-behavior: smooth;
   }
-  
+
   .glass-card {
     background: rgba(19, 20, 26, 0.6);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(42, 45, 58, 0.8);
   }
-  
+
   .glow-primary {
     box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
   }
-  
+
   .glow-accent {
     box-shadow: 0 0 20px rgba(123, 63, 242, 0.3);
   }

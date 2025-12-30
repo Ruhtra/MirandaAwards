@@ -4,13 +4,15 @@ import { useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { X } from "lucide-react"
+import { X, Upload, UserCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import { Spinner } from "@/components/ui/spinner"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useToast } from "@/hooks/use-toast"
 import { createUserSchema, type CreateUserInput } from "@/lib/validations/user"
 import type { User } from "@/lib/types"
@@ -47,7 +49,6 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
     enabled: isEditing && open,
   })
 
-  // Update form when user data is loaded
   useEffect(() => {
     if (!isLoadingUser && user && isEditing) {
       form.reset({
@@ -64,7 +65,7 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
         role: "USER",
       })
     }
-  }, [user, isEditing, form])
+  }, [user, isEditing, form, isLoadingUser])
 
   // Create mutation
   const createMutation = useMutation({
@@ -142,11 +143,9 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-lg glass-card overflow-y-auto">
-        <SheetHeader className="mb-6">
-          <SheetTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            {isEditing ? "Editar Usuário" : "Novo Usuário"}
-          </SheetTitle>
+      <SheetContent side="right" className="w-full sm:max-w-lg overflow-y-auto p-0">
+        <SheetHeader className="px-5 pt-5 pb-4">
+          <SheetTitle className="text-xl font-semibold">{isEditing ? "Editar Usuário" : "Novo Usuário"}</SheetTitle>
         </SheetHeader>
 
         {isLoadingUser ? (
@@ -155,7 +154,29 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="px-5 pb-5 space-y-4">
+              <div className="flex flex-col items-center gap-3 py-4">
+                <div className="relative">
+                  <div className="size-24 rounded-xl overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
+                    <Avatar className="size-full rounded-xl">
+                      <AvatarImage src={/* user?.avatar */ false || "/placeholder.svg"} alt="User avatar" />
+                      <AvatarFallback className="rounded-xl bg-transparent">
+                        <UserCircle className="size-12 text-muted-foreground" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="secondary"
+                    className="absolute -bottom-2 -right-2 size-8 rounded-full shadow-md"
+                  >
+                    <Upload className="size-4" />
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">Clique para adicionar foto</p>
+              </div>
+
               <FormField
                 control={form.control}
                 name="name"
@@ -224,7 +245,15 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
                 )}
               />
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="space-y-0.5">
+                  <label className="text-sm font-medium">Status do Usuário</label>
+                  <p className="text-xs text-muted-foreground">Ativo ou inativo no sistema</p>
+                </div>
+                <Switch defaultChecked />
+              </div>
+
+              <div className="flex gap-2.5 pt-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -232,13 +261,13 @@ export function UserSheet({ open, onOpenChange, userId }: UserSheetProps) {
                   className="flex-1"
                   disabled={isLoading}
                 >
-                  <X className="size-4 mr-2" />
+                  <X className="size-4 mr-1.5" />
                   Cancelar
                 </Button>
-                <Button type="submit" className="flex-1 glow-primary" disabled={isLoading}>
+                <Button type="submit" className="flex-1" disabled={isLoading}>
                   {isLoading ? (
                     <>
-                      <Spinner className="size-4 mr-2" />
+                      <Spinner className="size-4 mr-1.5" />
                       Salvando...
                     </>
                   ) : (

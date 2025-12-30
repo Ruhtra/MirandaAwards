@@ -23,6 +23,13 @@ export const createUserSchema = z.object({
   role: z.enum(["USER", "ADMIN"]).default("USER"),
 })
 
+
+
+
+
+
+
+
 export const updateUserSchema = z.object({
   name: z
     .string()

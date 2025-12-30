@@ -1,15 +1,8 @@
-"use client"
+"use server";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { redirect } from "next/navigation";
 
-export default function HomePage() {
-  const router = useRouter()
-
-  useEffect(() => {
-    // Redirect to login as default entry point
-    router.replace("/login")
-  }, [router])
-
-  return null
+export default async function IndexPage() {
+  //TO-DO: Added redirect based on user role
+  await redirect("/login");
 }

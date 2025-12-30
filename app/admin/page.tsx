@@ -1,15 +1,8 @@
-"use client"
+"use server";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { redirect } from "next/navigation";
 
-export default function AdminPage() {
-  const router = useRouter()
-
-  useEffect(() => {
-    // Redirect to users page as default admin page
-    router.replace("/admin/users")
-  }, [router])
-
-  return null
+export default async function adminPage() {
+  //TO-DO: Added redirect based on user role
+  await redirect("/admin/users");
 }

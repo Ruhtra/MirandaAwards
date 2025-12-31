@@ -79,3 +79,26 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Category {
+  id   String @id
+  name String
+
+  games Game[] // Many-to-Many implícito
+
+  @@map("category")
+}
+
+model Game {
+  id          String   @id
+  name        String
+  image_url   String?
+  description String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categories Category[] // Many-to-Many implícito
+
+  @@map("game")
+}

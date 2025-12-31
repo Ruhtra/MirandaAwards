@@ -7,7 +7,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, action }: PageHeaderProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
       <h1 className="text-2xl md:text-3xl font-semibold text-foreground tracking-tight">{title}</h1>
       {action && <div className="w-full md:w-auto">{action}</div>}
     </div>

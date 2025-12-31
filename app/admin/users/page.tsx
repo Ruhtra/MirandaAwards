@@ -4,56 +4,63 @@ import { useState } from "react"
 import { UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { UserList } from "./_components/user-list"
-import { UserSheet } from "./_components/user-sheet"
+import { CreateUserSheet } from "./_components/create-user-sheet"
+import { EditUserSheet } from "./_components/edit-user-sheet"
 import { PageHeader } from "./_components/page-header"
 import { UserFilters } from "./_components/user-filters"
 
 export default function UsersPage() {
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const [createSheetOpen, setCreateSheetOpen] = useState(false)
+  const [editSheetOpen, setEditSheetOpen] = useState(false)
   const [editingUserId, setEditingUserId] = useState<string | null>(null)
 
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState<string>("all")
 
   const handleCreateUser = () => {
-    setEditingUserId(null)
-    setSheetOpen(true)
+    setCreateSheetOpen(true)
   }
 
   const handleEditUser = (userId: string) => {
     setEditingUserId(userId)
-    setSheetOpen(true)
+    setEditSheetOpen(true)
   }
 
-  const handleCloseSheet = () => {
-    setSheetOpen(false)
+  const handleCloseEditSheet = () => {
+    setEditSheetOpen(false)
     setEditingUserId(null)
   }
 
   return (
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex-none space-y-3 pb-3">
+        <PageHeader
+          title="Usuários"
+          action={
+            <Button onClick={handleCreateUser} className="w-full md:w-auto gap-2">
+              <UserPlus className="size-4" />
+              <span>Novo Usuário</span>
+            </Button>
+          }
+        />
 
-    <div className="space-y-4">
-      <PageHeader
-        title="Usuários"
-        action={
-          <Button onClick={handleCreateUser} className="w-full md:w-auto gap-2">
-            <UserPlus className="size-4" />
-            <span className="md:inline">Novo Usuário</span>
-          </Button>
-        }
-      />
+        <UserFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          roleFilter={roleFilter}
+          onRoleChange={setRoleFilter}
+        />
+      </div>
 
-      <UserFilters
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        roleFilter={roleFilter}
-        onRoleChange={setRoleFilter}
-      />
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <UserList onEditUser={handleEditUser} searchQuery={searchQuery} roleFilter={roleFilter} />
+      </div>
 
-      <UserList onEditUser={handleEditUser} searchQuery={searchQuery} roleFilter={roleFilter} />
+      <CreateUserSheet open={createSheetOpen} onOpenChange={setCreateSheetOpen} />
 
-
-      <UserSheet open={sheetOpen} onOpenChange={handleCloseSheet} userId={editingUserId} />
+      {editingUserId && (
+        <EditUserSheet open={editSheetOpen} onOpenChange={handleCloseEditSheet} userId={editingUserId} />
+      )}
     </div>
   )
 }

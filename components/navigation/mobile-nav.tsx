@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
     title: "Jogos",
     href: "/admin/games",
     icon: Gamepad2,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Categorias",

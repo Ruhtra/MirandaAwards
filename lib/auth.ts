@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { nextCookies } from "better-auth/next-js";
 import { Role } from "@/prisma/generated/enums";
+import { admin } from "better-auth/plugins"
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
@@ -11,7 +12,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  plugins: [nextCookies()],
+  plugins: [nextCookies(), admin()],
   user: {
     additionalFields: {
       role: {

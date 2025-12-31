@@ -1,21 +1,15 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { createUserSchema } from "@/lib/validations/user"
-// import { auth } from "@/auth"
+import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
+import { APIError } from "better-auth/api"
 
 export async function GET() {
   try {
-    // const session = await auth.api.getSession({
-    //   headers: await headers(),
-    // })
-
-    const session  = {
-      user: {
-        role: "ADMIN"
-      }
-
-    }
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    })
 
     if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
@@ -42,19 +36,16 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-  
-    const session  = {
-      user: {
-        role: "ADMIN"
-      }
-
-    }
-
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    })
 
     if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
     }
 
+
+    //valida os dados de entrada
     const body = await request.json()
     const validated = createUserSchema.safeParse(body)
 
@@ -62,37 +53,47 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Dados inválidos", details: validated.error.issues }, { status: 400 })
     }
 
-    const { name, email, password, role } = validated.data
+
+
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: validated.data.email },
     })
 
     if (existingUser) {
       return NextResponse.json({ error: "Este email já está em uso" }, { status: 400 })
     }
 
-    // const hashedPassword = await bcrypt.hash(password, 10)
-    const hashedPassword = password
+    let newUser
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: role as any,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    })
+    try {
+      newUser = await auth.api.createUser({
+        body: {
+          email: validated.data.email,
+          password: validated.data.password,
+          name: validated.data.name,
+          role: "user",
+          data: {
+            role: validated.data.role,
+          }
+        },
+      });
+    } catch (error) {
+      if (error instanceof APIError) {
+        console.log('-------');
 
-    return NextResponse.json(user, { status: 201 })
+        console.log(error.message, error.status)
+        console.log('-------');
+        throw error
+        // return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+    }
+
+
+    console.log("Usuário criado com sucesso")
+
+
+    return NextResponse.json(newUser, { status: 201 })
   } catch (error) {
     console.error("[v0] Erro ao criar usuário:", error)
     return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 })

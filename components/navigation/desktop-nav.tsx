@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
     title: "Jogos",
     href: "/admin/games",
     icon: Gamepad2,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Categorias",
@@ -53,7 +53,7 @@ export function DesktopNav() {
 
   return (
     <nav className="hidden md:block fixed top-0 left-0 right-0 z-50 border-b border-border bg-card">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           <Link href="/admin" className="flex items-center gap-2">
             <div className="size-7 rounded-lg bg-primary flex items-center justify-center">

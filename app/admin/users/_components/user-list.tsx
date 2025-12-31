@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Edit, Trash2, Shield, UserIcon, Mail, Calendar } from "lucide-react"
+import { Edit, Trash2, Shield, UserIcon, MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -12,6 +12,7 @@ import { UserListSkeleton } from "./user-list-skeleton"
 import { useState, useMemo } from "react"
 import type { User } from "@/lib/types"
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface UserListProps {
   onEditUser: (userId: string) => void
@@ -118,52 +119,43 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
 
   return (
     <>
-      <Card className="glass-card overflow-hidden">
-        <ScrollArea className="h-[calc(100vh-300px)] md:h-[calc(100vh-320px)]">
+      <Card className="glass-card overflow-hidden h-full py-0">
+        <ScrollArea className="h-full">
           <div className="divide-y divide-border">
             {filteredUsers.map((user) => (
-              <div key={user.id} className="p-4 hover:bg-accent/30 transition-colors">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                        <UserIcon className="size-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-foreground text-lg">{user.name}</h3>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                          <Mail className="size-3" />
-                          {user.email}
-                        </div>
-                      </div>
-                      <Badge variant={user.role === "ADMIN" ? "default" : "secondary"} className="gap-1">
-                        <Shield className="size-3" />
-                        {user.role === "ADMIN" ? "Administrador" : "Usuário"}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Calendar className="size-3" />
-                      Criado em {new Date(user.created_at).toLocaleDateString("pt-BR")}
-                    </div>
+              <div key={user.id} className="p-3 hover:bg-accent/30 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="size-9 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
+                    <UserIcon className="size-4 text-primary" />
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => onEditUser(user.id)}
-                      className="hover:text-primary hover:bg-primary/10"
-                    >
-                      <Edit className="size-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => handleDeleteClick(user)}
-                      className="hover:text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
+
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground truncate">{user.name}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                   </div>
+
+                  <Badge variant={user.role === "ADMIN" ? "default" : "secondary"} className="gap-1 flex-shrink-0">
+                    <Shield className="size-3" />
+                    {user.role === "ADMIN" ? "Admin" : "User"}
+                  </Badge>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon-sm" className="flex-shrink-0">
+                        <MoreVertical className="size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onEditUser(user.id)}>
+                        <Edit className="size-4" />
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem variant="destructive" onClick={() => handleDeleteClick(user)}>
+                        <Trash2 className="size-4" />
+                        Deletar
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             ))}

@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
     title: "Categorias",
     href: "/admin/categories",
     icon: FolderKanban,
-    disabled: true,
+    disabled: false,
   },
   {
     title: "Votos",

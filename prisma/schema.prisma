@@ -82,7 +82,7 @@ model Verification {
 
 model Category {
   id   String @id
-  name String
+  name String @unique
 
   games Game[] // Many-to-Many implícito
 

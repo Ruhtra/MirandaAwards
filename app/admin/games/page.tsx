@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { PageHeader } from "../users/_components/page-header"
 import { GameFilters } from "./_components/game-filters"
 import { GameGrid } from "./_components/game-grid"
-// import { CreateGameSheet } from "./_components/create-game-sheet"
-// import { EditGameSheet } from "./_components/edit-game-sheet"
+import { CreateGameSheet } from "./_components/create-game-sheet"
+import { EditGameSheet } from "./_components/edit-game-sheet"
 
 export default function GamesPage() {
   const [createSheetOpen, setCreateSheetOpen] = useState(false)
@@ -20,6 +20,13 @@ export default function GamesPage() {
   const handleEditGame = (gameId: string) => {
     setSelectedGameId(gameId)
     setEditSheetOpen(true)
+  }
+
+  const handleCloseEditSheet = (open: boolean) => {
+    setEditSheetOpen(open)
+    if (!open) {
+      setSelectedGameId(null)
+    }
   }
 
   return (
@@ -52,9 +59,11 @@ export default function GamesPage() {
         />
       </div>
 
-      {/* <CreateGameSheet open={createSheetOpen} onOpenChange={setCreateSheetOpen} />
+      <CreateGameSheet open={createSheetOpen} onOpenChange={setCreateSheetOpen} />
 
-      {selectedGameId && <EditGameSheet open={editSheetOpen} onOpenChange={setEditSheetOpen} gameId={selectedGameId} />} */}
+      {selectedGameId && (
+        <EditGameSheet open={editSheetOpen} onOpenChange={handleCloseEditSheet} gameId={selectedGameId} />
+      )}
     </div>
   )
 }

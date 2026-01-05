@@ -42,8 +42,8 @@ export function GameFilters({
             <Filter className="size-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-80">
-          <SheetHeader className="pb-4">
+        <SheetContent side="right" className="w-80 p-4">
+          <SheetHeader className=" p-0">
             <SheetTitle>Filtros</SheetTitle>
           </SheetHeader>
 

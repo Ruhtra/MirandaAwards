@@ -6,6 +6,8 @@ import { headers } from "next/headers"
 import { APIError } from "better-auth/api"
 import { GameWithCategoriesDTO } from "@/lib/Dto/gameDTO"
 import { Game } from "@/prisma/generated/client"
+import { createGameSchema } from "@/lib/validations/game"
+import { randomUUID } from "crypto"
 
 export async function GET(): Promise<NextResponse<GameWithCategoriesDTO[] | { error: string }>> {
     try {
@@ -45,68 +47,56 @@ export async function GET(): Promise<NextResponse<GameWithCategoriesDTO[] | { er
     }
 }
 
-// export async function POST(request: Request) {
-//   try {
-//     const session = await auth.api.getSession({
-//       headers: await headers(),
-//     })
+export async function POST(request: Request): Promise<NextResponse<Game | { error: string }>> {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        })
 
-//     if (!session || session.user.role !== "ADMIN") {
-//       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
-//     }
-
-
-//     //valida os dados de entrada
-//     const body = await request.json()
-//     const validated = createUserSchema.safeParse(body)
-
-//     if (!validated.success) {
-//       return NextResponse.json({ error: "Dados inválidos", details: validated.error.issues }, { status: 400 })
-//     }
+        if (!session || session.user.role !== "ADMIN") {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
 
 
+        //valida os dados de entrada
+        const body = await request.json()
+        const validated = createGameSchema.safeParse(body)
+
+        if (!validated.success) {
+            return NextResponse.json({ error: "Dados inválidos", details: validated.error.issues }, { status: 400 })
+        }
 
 
-//     const existingUser = await prisma.user.findUnique({
-//       where: { email: validated.data.email },
-//     })
-
-//     if (existingUser) {
-//       return NextResponse.json({ error: "Este email já está em uso" }, { status: 400 })
-//     }
-
-//     let newUser
-
-//     try {
-//       newUser = await auth.api.createUser({
-//         body: {
-//           email: validated.data.email,
-//           password: validated.data.password,
-//           name: validated.data.name,
-//           role: "user",
-//           data: {
-//             role: validated.data.role,
-//           }
-//         },
-//       });
-//     } catch (error) {
-//       if (error instanceof APIError) {
-//         console.log('-------');
-
-//         console.log(error.message, error.status)
-//         console.log('-------');
-//         throw error
-//         // return NextResponse.json({ error: error.message }, { status: 500 })
-//       }
-//     }
 
 
-//     console.log("Usuário criado com sucesso")
+
+        const newGame = await prisma.game.create({
+            data: {
+                id: randomUUID(),
+                name: validated.data.name,
+                description: validated.data.description,
+                published: validated.data.published,
+                categories: {
+                    connect: validated.data.categoryIds.map((catId) => ({ id: catId })),
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                image_url: true,
+                description: true,
+                published: true,
+                createdAt: true,
+                categories: true,
+                updatedAt: true
+            }
+        })
 
 
-//     return NextResponse.json(newUser, { status: 201 })
-//   } catch (error) {
-//     console.error("[v0] Erro ao criar usuário:", error)
-//     return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 })
-//   }
-// }
+
+        return NextResponse.json(newGame, { status: 201 })
+    } catch (error) {
+        console.error("[v0] Erro ao criar game:", error)
+        return NextResponse.json({ error: "Erro ao criar game" }, { status: 500 })
+    }
+}

@@ -1,6 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
 
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+
 import { Analytics } from "@vercel/analytics/next"
 import { QueryProvider } from "@/lib/providers/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -56,7 +59,11 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <QueryProvider>{children}</QueryProvider>
+
+          <QueryProvider>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryProvider>
           <Toaster />
         </ThemeProvider>
         <Analytics />

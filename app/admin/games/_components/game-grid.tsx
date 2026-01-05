@@ -12,7 +12,7 @@ import { GameGridSkeleton } from "./game-grid-skeleton"
 import { useState, useMemo } from "react"
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { GameWithCategoriesDTO } from "@/lib/Dto/gameDTO"
+import type { GameWithCategoriesDTO } from "@/lib/Dto/gameDTO"
 
 interface GameGridProps {
   onEditGame: (gameId: string) => void
@@ -142,7 +142,7 @@ export function GameGrid({ onEditGame, searchQuery, publishedFilter, categoryFil
                     </Badge>
                   </div>
 
-                  <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute top-2 left-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="secondary" size="icon-sm" className="size-7 bg-background/80 backdrop-blur-sm">

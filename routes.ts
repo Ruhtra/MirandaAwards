@@ -2,8 +2,6 @@ import { Role } from "./prisma/generated/enums";
 
 export const publicRoutes = [];
 
-export const userRoutes = ["/user/", "/user/dasboard"];
-
 export const authRoutes = [
   "/login",
   // "/logout",
@@ -12,6 +10,8 @@ export const authRoutes = [
   // "/auth/reset-password",
   // "/auth/new-password",
 ];
+
+export const userRoutes = ["/user", "/user/dasboard", "/user/games"];
 export const adminRoutes = [
   "/admin",
   "/admin/dasboard",

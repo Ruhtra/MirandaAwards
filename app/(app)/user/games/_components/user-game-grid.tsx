@@ -3,26 +3,26 @@
 import { useState } from "react";
 import { UserGameCard } from "./user-game-card";
 import { GameVoteSheet } from "./game-vote-sheet";
-import { GameWithCategoriesDTO } from "@/lib/Dto/gameDTO";
+import { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO";
 
 interface UserGameGridProps {
-  games: GameWithCategoriesDTO[];
-  userVotes: Record<string, Record<string, number>>; // gameId -> categoryId -> score
+  games: GameWithVotesAndCategoryDTO[];
 }
 
-export function UserGameGrid({ games, userVotes }: UserGameGridProps) {
+export function UserGameGrid({ games }: UserGameGridProps) {
   const [selectedGame, setSelectedGame] =
-    useState<GameWithCategoriesDTO | null>(null);
+    useState<GameWithVotesAndCategoryDTO | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const handleGameClick = (game: GameWithCategoriesDTO) => {
+  const handleGameClick = (game: GameWithVotesAndCategoryDTO) => {
     setSelectedGame(game);
     setIsSheetOpen(true);
   };
 
-  const getGameVoteStats = (game: GameWithCategoriesDTO) => {
-    const gameVotes = userVotes[game.id] || {};
-    const votedCount = Object.keys(gameVotes).length;
+  const getGameVoteStats = (game: GameWithVotesAndCategoryDTO) => {
+    const votedCount = game.categories
+      .map((e) => e.vote)
+      .filter((e) => e != null).length;
     const totalCategories = game.categories?.length || 0;
     const hasPendingVotes = votedCount < totalCategories && totalCategories > 0;
 
@@ -58,7 +58,6 @@ export function UserGameGrid({ games, userVotes }: UserGameGridProps) {
           game={selectedGame}
           isOpen={isSheetOpen}
           onOpenChange={setIsSheetOpen}
-          userVotes={userVotes[selectedGame.id] || {}}
         />
       )}
     </>

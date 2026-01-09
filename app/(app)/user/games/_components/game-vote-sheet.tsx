@@ -19,27 +19,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { GameWithCategoriesDTO } from "@/lib/Dto/gameDTO";
+import { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO";
 
 interface GameVoteSheetProps {
-  game: GameWithCategoriesDTO;
+  game: GameWithVotesAndCategoryDTO;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  userVotes: Record<string, number>; // categoryId -> score
 }
 
 export function GameVoteSheet({
   game,
   isOpen,
   onOpenChange,
-  userVotes,
 }: GameVoteSheetProps) {
   const { toast } = useToast();
-  const [votes, setVotes] = useState<Record<string, number>>(userVotes);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleVoteChange = (categoryId: string, value: number) => {
-    setVotes((prev) => ({ ...prev, [categoryId]: value }));
+    // setVotes((prev) => ({ ...prev, [categoryId]: value }));
   };
 
   const handleSave = async () => {
@@ -64,7 +61,7 @@ export function GameVoteSheet({
   };
 
   const categories = game.categories || [];
-  const votedCount = Object.keys(votes).length;
+  const votedCount = game.categories.map((e) => e.vote).length;
   const progress =
     categories.length > 0 ? (votedCount / categories.length) * 100 : 0;
 
@@ -91,7 +88,7 @@ export function GameVoteSheet({
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
           <div className="space-y-5">
             {categories.map((category) => {
-              const currentVote = votes[category.id] ?? 0;
+              const currentVote = category.vote?.score ?? 0;
               return (
                 <div
                   key={category.id}

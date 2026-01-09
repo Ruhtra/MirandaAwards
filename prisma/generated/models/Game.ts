@@ -199,6 +199,7 @@ export type GameWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   categories?: Prisma.CategoryListRelationFilter
+  votes?: Prisma.VoteListRelationFilter
 }
 
 export type GameOrderByWithRelationInput = {
@@ -210,6 +211,7 @@ export type GameOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   categories?: Prisma.CategoryOrderByRelationAggregateInput
+  votes?: Prisma.VoteOrderByRelationAggregateInput
 }
 
 export type GameWhereUniqueInput = Prisma.AtLeast<{
@@ -224,6 +226,7 @@ export type GameWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   categories?: Prisma.CategoryListRelationFilter
+  votes?: Prisma.VoteListRelationFilter
 }, "id">
 
 export type GameOrderByWithAggregationInput = {
@@ -261,6 +264,7 @@ export type GameCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutGamesInput
+  votes?: Prisma.VoteCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateInput = {
@@ -272,6 +276,7 @@ export type GameUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutGamesInput
+  votes?: Prisma.VoteUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameUpdateInput = {
@@ -283,6 +288,7 @@ export type GameUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutGamesNestedInput
+  votes?: Prisma.VoteUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateInput = {
@@ -294,6 +300,7 @@ export type GameUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutGamesNestedInput
+  votes?: Prisma.VoteUncheckedUpdateManyWithoutGameNestedInput
 }
 
 export type GameCreateManyInput = {
@@ -366,6 +373,11 @@ export type GameMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type GameScalarRelationFilter = {
+  is?: Prisma.GameWhereInput
+  isNot?: Prisma.GameWhereInput
+}
+
 export type GameCreateNestedManyWithoutCategoriesInput = {
   create?: Prisma.XOR<Prisma.GameCreateWithoutCategoriesInput, Prisma.GameUncheckedCreateWithoutCategoriesInput> | Prisma.GameCreateWithoutCategoriesInput[] | Prisma.GameUncheckedCreateWithoutCategoriesInput[]
   connectOrCreate?: Prisma.GameCreateOrConnectWithoutCategoriesInput | Prisma.GameCreateOrConnectWithoutCategoriesInput[]
@@ -404,6 +416,20 @@ export type GameUncheckedUpdateManyWithoutCategoriesNestedInput = {
   deleteMany?: Prisma.GameScalarWhereInput | Prisma.GameScalarWhereInput[]
 }
 
+export type GameCreateNestedOneWithoutVotesInput = {
+  create?: Prisma.XOR<Prisma.GameCreateWithoutVotesInput, Prisma.GameUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.GameCreateOrConnectWithoutVotesInput
+  connect?: Prisma.GameWhereUniqueInput
+}
+
+export type GameUpdateOneRequiredWithoutVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameCreateWithoutVotesInput, Prisma.GameUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.GameCreateOrConnectWithoutVotesInput
+  upsert?: Prisma.GameUpsertWithoutVotesInput
+  connect?: Prisma.GameWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameUpdateToOneWithWhereWithoutVotesInput, Prisma.GameUpdateWithoutVotesInput>, Prisma.GameUncheckedUpdateWithoutVotesInput>
+}
+
 export type GameCreateWithoutCategoriesInput = {
   id: string
   name: string
@@ -412,6 +438,7 @@ export type GameCreateWithoutCategoriesInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  votes?: Prisma.VoteCreateNestedManyWithoutGameInput
 }
 
 export type GameUncheckedCreateWithoutCategoriesInput = {
@@ -422,6 +449,7 @@ export type GameUncheckedCreateWithoutCategoriesInput = {
   published?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  votes?: Prisma.VoteUncheckedCreateNestedManyWithoutGameInput
 }
 
 export type GameCreateOrConnectWithoutCategoriesInput = {
@@ -458,6 +486,66 @@ export type GameScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Game"> | Date | string
 }
 
+export type GameCreateWithoutVotesInput = {
+  id: string
+  name: string
+  image_url?: string | null
+  description?: string | null
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutGamesInput
+}
+
+export type GameUncheckedCreateWithoutVotesInput = {
+  id: string
+  name: string
+  image_url?: string | null
+  description?: string | null
+  published?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutGamesInput
+}
+
+export type GameCreateOrConnectWithoutVotesInput = {
+  where: Prisma.GameWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameCreateWithoutVotesInput, Prisma.GameUncheckedCreateWithoutVotesInput>
+}
+
+export type GameUpsertWithoutVotesInput = {
+  update: Prisma.XOR<Prisma.GameUpdateWithoutVotesInput, Prisma.GameUncheckedUpdateWithoutVotesInput>
+  create: Prisma.XOR<Prisma.GameCreateWithoutVotesInput, Prisma.GameUncheckedCreateWithoutVotesInput>
+  where?: Prisma.GameWhereInput
+}
+
+export type GameUpdateToOneWithWhereWithoutVotesInput = {
+  where?: Prisma.GameWhereInput
+  data: Prisma.XOR<Prisma.GameUpdateWithoutVotesInput, Prisma.GameUncheckedUpdateWithoutVotesInput>
+}
+
+export type GameUpdateWithoutVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  image_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutGamesNestedInput
+}
+
+export type GameUncheckedUpdateWithoutVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  image_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutGamesNestedInput
+}
+
 export type GameUpdateWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -466,6 +554,7 @@ export type GameUpdateWithoutCategoriesInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  votes?: Prisma.VoteUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateWithoutCategoriesInput = {
@@ -476,6 +565,7 @@ export type GameUncheckedUpdateWithoutCategoriesInput = {
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  votes?: Prisma.VoteUncheckedUpdateManyWithoutGameNestedInput
 }
 
 export type GameUncheckedUpdateManyWithoutCategoriesInput = {
@@ -495,10 +585,12 @@ export type GameUncheckedUpdateManyWithoutCategoriesInput = {
 
 export type GameCountOutputType = {
   categories: number
+  votes: number
 }
 
 export type GameCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | GameCountOutputTypeCountCategoriesArgs
+  votes?: boolean | GameCountOutputTypeCountVotesArgs
 }
 
 /**
@@ -518,6 +610,13 @@ export type GameCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types
   where?: Prisma.CategoryWhereInput
 }
 
+/**
+ * GameCountOutputType without action
+ */
+export type GameCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoteWhereInput
+}
+
 
 export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -528,6 +627,7 @@ export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   categories?: boolean | Prisma.Game$categoriesArgs<ExtArgs>
+  votes?: boolean | Prisma.Game$votesArgs<ExtArgs>
   _count?: boolean | Prisma.GameCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["game"]>
 
@@ -564,6 +664,7 @@ export type GameSelectScalar = {
 export type GameOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "image_url" | "description" | "published" | "createdAt" | "updatedAt", ExtArgs["result"]["game"]>
 export type GameInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | Prisma.Game$categoriesArgs<ExtArgs>
+  votes?: boolean | Prisma.Game$votesArgs<ExtArgs>
   _count?: boolean | Prisma.GameCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GameIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -573,6 +674,7 @@ export type $GamePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Game"
   objects: {
     categories: Prisma.$CategoryPayload<ExtArgs>[]
+    votes: Prisma.$VotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -977,6 +1079,7 @@ readonly fields: GameFieldRefs;
 export interface Prisma__GameClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   categories<T extends Prisma.Game$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  votes<T extends Prisma.Game$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Game$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1422,6 +1525,30 @@ export type Game$categoriesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
+}
+
+/**
+ * Game.votes
+ */
+export type Game$votesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vote
+   */
+  select?: Prisma.VoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vote
+   */
+  omit?: Prisma.VoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoteInclude<ExtArgs> | null
+  where?: Prisma.VoteWhereInput
+  orderBy?: Prisma.VoteOrderByWithRelationInput | Prisma.VoteOrderByWithRelationInput[]
+  cursor?: Prisma.VoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoteScalarFieldEnum | Prisma.VoteScalarFieldEnum[]
 }
 
 /**

@@ -27,7 +27,7 @@ export function UserGameCard({
 
   return (
     <Card
-      className={`group relative overflow-hidden cursor-pointer transition-all hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 ${
+      className={`group relative overflow-hidden cursor-pointer transition-all hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 py-0 ${
         hasPendingVotes
           ? "border-red-500/50 ring-2 ring-red-500/20"
           : isComplete

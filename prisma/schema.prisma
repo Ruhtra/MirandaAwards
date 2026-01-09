@@ -26,6 +26,7 @@ model User {
   banExpires    DateTime?
   sessions      Session[]
   accounts      Account[]
+  votes         Vote[]
 
   @@unique([email])
   @@map("user")
@@ -81,10 +82,12 @@ model Verification {
 }
 
 model Category {
-  id   String @id
-  name String @unique
+  id          String  @id
+  name        String  @unique
+  description String?
 
   games Game[] // Many-to-Many implícito
+  votes Vote[]
 
   @@map("category")
 }
@@ -99,6 +102,26 @@ model Game {
   updatedAt   DateTime @updatedAt
 
   categories Category[] // Many-to-Many implícito
+  votes      Vote[]
 
   @@map("game")
+}
+
+model Vote {
+  id         String   @id
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId     String
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  score      Int // 0-10
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, gameId, categoryId])
+  @@index([userId])
+  @@index([gameId])
+  @@index([categoryId])
+  @@map("vote")
 }

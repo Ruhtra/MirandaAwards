@@ -69,3 +69,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Game = Prisma.GameModel
+/**
+ * Model Vote
+ * 
+ */
+export type Vote = Prisma.VoteModel

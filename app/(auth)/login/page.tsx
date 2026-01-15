@@ -21,6 +21,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
 import { signIn } from "@/lib/auth-client";
 import { auth } from "@/lib/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -58,12 +59,22 @@ export default function LoginPage() {
               variant: "destructive",
             });
           },
+
           onSuccess: async (ctx) => {
+
+            const role = ctx.data.user.role;
+
             toast({
               title: "Login bem-sucedido",
               description: "Você foi autenticado com sucesso!",
             });
-            await router.push("/admin/users");
+
+            if (role === "ADMIN") {
+              await router.push(DEFAULT_LOGIN_REDIRECT.ADMIN);
+            } else if (role === "USER") {
+              await router.push(DEFAULT_LOGIN_REDIRECT.USER);
+            }
+
           },
         }
       );

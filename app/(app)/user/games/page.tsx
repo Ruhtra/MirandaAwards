@@ -1,59 +1,51 @@
-"use client";
+"use client"
 
-import { useMemo, useState } from "react";
-import { UserGameFilters } from "./_components/user-game-filters";
-import { UserGameGrid } from "./_components/user-game-grid";
-import {
-  GameWithCategoriesDTO,
-  GameWithVotesAndCategoryDTO,
-} from "@/lib/Dto/gameDTO";
-import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react"
+import { UserGameFilters } from "./_components/user-game-filters"
+import { UserGameGrid } from "./_components/user-game-grid"
+import { GamesSkeleton } from "./_components/games-skeleton"
+import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
+import { useQuery } from "@tanstack/react-query"
 
 export default function GamesPage() {
-  const [search, setSearch] = useState("");
-  const [pendingOnly, setPendingOnly] = useState(false);
+  const [search, setSearch] = useState("")
+  const [pendingOnly, setPendingOnly] = useState(false)
 
   const { data: games, isLoading } = useQuery<GameWithVotesAndCategoryDTO[]>({
     queryKey: ["gamesToUser"],
     queryFn: async () => {
-      const response = await fetch("/api/WithVoteByuser");
-      if (!response.ok) throw new Error("Erro ao buscar jogos");
-      return response.json();
+      const response = await fetch("/api/WithVoteByuser")
+      if (!response.ok) throw new Error("Erro ao buscar jogos")
+      return response.json()
     },
-  });
+  })
 
   const filteredGames = useMemo(() => {
-    if (!games) return [];
+    if (!games) return []
 
     return games.filter((game) => {
-      const matchesSearch = search
-        ? game.name.toLowerCase().includes(search.toLowerCase())
-        : true;
+      const matchesSearch = search ? game.name.toLowerCase().includes(search.toLowerCase()) : true
 
       if (pendingOnly) {
-        const votedCount = game.categories
-          .map((e) => e.vote)
-          .filter((e) => e != null).length;
-        const totalCategories = game.categories?.length || 0;
+        const votedCount = game.categories.map((e) => e.vote).filter((e) => e != null).length
+        const totalCategories = game.categories?.length || 0
 
-        const hasPending = votedCount < totalCategories && totalCategories > 0;
-        return matchesSearch && hasPending;
+        const hasPending = votedCount < totalCategories && totalCategories > 0
+        return matchesSearch && hasPending
       }
-      return matchesSearch;
-    });
-  }, [games, search, pendingOnly]);
+      return matchesSearch
+    })
+  }, [games, search, pendingOnly])
 
   if (isLoading) {
-    return <h1>LOADING</h1>;
+    return <GamesSkeleton />
   }
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-4 sm:space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Jogos</h1>
-        <p className="text-sm text-muted-foreground">
-          Vote nos seus jogos favoritos em cada categoria
-        </p>
+        <p className="text-sm text-muted-foreground">Vote nos seus jogos favoritos em cada categoria</p>
       </div>
 
       <UserGameFilters
@@ -65,5 +57,5 @@ export default function GamesPage() {
 
       <UserGameGrid games={filteredGames} />
     </div>
-  );
+  )
 }

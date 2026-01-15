@@ -86,22 +86,23 @@ model Category {
   name        String  @unique
   description String?
 
-  games Game[] // Many-to-Many implícito
+  games Game[]
   votes Vote[]
 
   @@map("category")
 }
 
 model Game {
-  id          String   @id
-  name        String
-  image_url   String?
-  description String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             String   @id
+  name           String
+  image_url      String?
+  image_filename String?
+  description    String?
+  published      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  categories Category[] // Many-to-Many implícito
+  categories Category[]
   votes      Vote[]
 
   @@map("game")
@@ -115,7 +116,7 @@ model Vote {
   game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  score      Int // 0-10
+  score      Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

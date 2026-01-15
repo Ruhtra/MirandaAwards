@@ -2,6 +2,7 @@ export interface GameWithCategoriesDTO {
   id: string;
   name: string;
   image_url?: string | null;
+  image_filename?: string | null; // Added image_filename
   description?: string | null;
   published: boolean;
   createdAt: Date;
@@ -13,6 +14,7 @@ export interface GameWithVotesAndCategoryDTO {
   id: string;
   name: string;
   image_url?: string | null;
+  image_filename?: string | null; // Added image_filename
   description?: string | null;
   published: boolean;
   createdAt: Date;
@@ -24,7 +26,6 @@ export interface CategoryWithVoteDTO {
   id: string;
   name: string;
   description?: string | null;
-
   vote?: VoteDTO | null;
 }
 

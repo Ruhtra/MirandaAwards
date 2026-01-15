@@ -1043,6 +1043,7 @@ export const GameScalarFieldEnum = {
   id: 'id',
   name: 'name',
   image_url: 'image_url',
+  image_filename: 'image_filename',
   description: 'description',
   published: 'published',
   createdAt: 'createdAt',

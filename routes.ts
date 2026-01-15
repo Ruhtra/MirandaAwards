@@ -19,6 +19,7 @@ export const adminRoutes = [
   "/admin/games",
   "/admin/categories",
   "/admin/votes",
+  "/admin/voteingames",
 ];
 export const apiAuthPrefix = "/api/auth";
 

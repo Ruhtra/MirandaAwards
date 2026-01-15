@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { updateUserSchema } from "@/lib/validations/user"
 // import bcrypt from "bcrypt"
 import { headers } from "next/headers"
+import { auth } from "@/lib/auth"
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -50,13 +51,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
 
-    const session = {
-      user: {
-        role: "ADMIN"
-      }
-
-    }
-
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    })
 
     if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
@@ -76,33 +73,46 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const { name, email, password, role } = validated.data
 
-    let hashedPassword: string | undefined
-    if (password) {
-      // hashedPassword = await bcrypt.hash(password, 10)
-      hashedPassword = password
-    }
 
-    const user = await prisma.user.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(email && { email }),
-        ...(password && { password: hashedPassword }),
-        ...(role && { role: role as any }),
+    // const { password: oldpassword } = await prisma.account.findFirstOrThrow({
+    //   where: { userId: id, providerId: "credential" },
+    //   select: {
+    //     password: true
+    //   },
+    // })
+
+    // const user = await prisma.user.update({
+    //   where: { id },
+    //   data: {
+
+    //   },
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     email: true,
+    //     role: true,
+    //     createdAt: true,
+    //     updatedAt: true,
+    //   },
+    // })
+
+    var user = await auth.api.adminUpdateUser({
+      body: {
+        userId: id,
+        data: {
+          name: name,
+          password: password,
+          email: email
+
+        }
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    })
+      headers: await headers(),
+    });
 
     return NextResponse.json(user)
-  } catch (error) {
+  } catch (error: any) {
     console.error("[v0] Erro ao atualizar usuário:", error)
+    console.error("[v0] Erro ao atualizar usuário:", error.body)
     return NextResponse.json({ error: "Erro ao atualizar usuário" }, { status: 500 })
   }
 }

@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Users, Gamepad2, FolderKanban, Vote, Menu, Trophy } from "lucide-react"
+import { Users, Gamepad2, FolderKanban, Vote, Menu, Trophy, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -21,6 +21,12 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    href: "/admin",
+    icon: LayoutDashboard,
+    disabled: false,
+  },
   {
     title: "Usuários",
     href: "/admin/users",
@@ -40,10 +46,10 @@ const navItems: NavItem[] = [
     disabled: false,
   },
   {
-    title: "Votos",
-    href: "/admin/votes",
+    title: "Votar nos Jogos",
+    href: "/admin/voteingames",
     icon: Vote,
-    disabled: true,
+    disabled: false,
   },
 ]
 
@@ -63,7 +69,7 @@ export function DesktopNav() {
           </Link>
 
           <div className="flex items-center gap-0.5">
-            {navItems.slice(0, 3).map((item) => {
+            {navItems.slice(0, 5).map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
 

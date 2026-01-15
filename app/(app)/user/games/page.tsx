@@ -1,9 +1,9 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { UserGameFilters } from "./_components/user-game-filters"
-import { UserGameGrid } from "./_components/user-game-grid"
-import { GamesSkeleton } from "./_components/games-skeleton"
+import { UserGameFilters } from "../../../../components/personalized/votePage/user-game-filters"
+import { UserGameGrid } from "../../../../components/personalized/votePage/user-game-grid"
+import { GamesSkeleton } from "../../../../components/personalized/votePage/games-skeleton"
 import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
 import { useQuery } from "@tanstack/react-query"
 

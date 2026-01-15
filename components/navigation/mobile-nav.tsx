@@ -1,39 +1,32 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  Users,
-  Gamepad2,
-  FolderKanban,
-  Vote,
-  Menu,
-  Trophy,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { UserProfileSection } from "./user-profile-section";
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Users, Gamepad2, FolderKanban, Vote, Menu, Trophy, LayoutDashboard } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
+import { UserProfileSection } from "./user-profile-section"
 
 interface NavItem {
-  title: string;
-  href: string;
-  icon: React.ElementType;
-  disabled?: boolean;
+  title: string
+  href: string
+  icon: React.ElementType
+  disabled?: boolean
 }
 
 const navItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    href: "/admin",
+    icon: LayoutDashboard,
+    disabled: false,
+  },
   {
     title: "Usuários",
     href: "/admin/users",
@@ -50,28 +43,28 @@ const navItems: NavItem[] = [
     title: "Categorias",
     href: "/admin/categories",
     icon: FolderKanban,
-    disabled: true,
+    disabled: false,
   },
   {
-    title: "Votos",
-    href: "/admin/votes",
+    title: "Votar nos Jogos",
+    href: "/admin/voteingames",
     icon: Vote,
-    disabled: true,
+    disabled: false,
   },
-];
+]
 
 export function MobileNav() {
-  const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
-  const firstThreeItems = navItems.slice(0, 3);
+  const firstThreeItems = [navItems[0], navItems[1], navItems[2]]
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-card">
       <div className="flex items-center justify-around h-14 px-2">
         {firstThreeItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
+          const Icon = item.icon
+          const isActive = pathname === item.href
 
           return (
             <Link
@@ -81,16 +74,14 @@ export function MobileNav() {
                 "flex flex-col items-center justify-center gap-1 flex-1 h-full rounded-lg transition-colors",
                 isActive && "text-foreground",
                 item.disabled && "opacity-40 pointer-events-none",
-                !isActive &&
-                  !item.disabled &&
-                  "text-muted-foreground hover:text-foreground"
+                !isActive && !item.disabled && "text-muted-foreground hover:text-foreground",
               )}
               onClick={(e) => item.disabled && e.preventDefault()}
             >
               <Icon className="size-5" />
               <span className="text-[10px] font-medium">{item.title}</span>
             </Link>
-          );
+          )
         })}
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -109,9 +100,7 @@ export function MobileNav() {
                 <div className="size-7 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
                   <Trophy className="size-4 text-primary-foreground" />
                 </div>
-                <SheetTitle className="text-lg font-semibold">
-                  Miranda Awards
-                </SheetTitle>
+                <SheetTitle className="text-lg font-semibold">Miranda Awards</SheetTitle>
               </div>
             </SheetHeader>
 
@@ -120,8 +109,8 @@ export function MobileNav() {
             <ScrollArea className="flex-1 px-4">
               <div className="flex flex-col gap-0.5 py-2">
                 {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
+                  const Icon = item.icon
+                  const isActive = pathname === item.href
 
                   return (
                     <Link
@@ -129,31 +118,25 @@ export function MobileNav() {
                       href={item.disabled ? "#" : item.href}
                       onClick={(e) => {
                         if (item.disabled) {
-                          e.preventDefault();
+                          e.preventDefault()
                         } else {
-                          setOpen(false);
+                          setOpen(false)
                         }
                       }}
                       className={cn(
                         "flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors",
                         isActive && "bg-secondary text-foreground",
                         item.disabled && "opacity-40 pointer-events-none",
-                        !isActive && !item.disabled && "hover:bg-secondary/50"
+                        !isActive && !item.disabled && "hover:bg-secondary/50",
                       )}
                     >
                       <Icon className="size-4.5" />
                       <div className="flex flex-col">
-                        <span className="font-medium text-sm">
-                          {item.title}
-                        </span>
-                        {item.disabled && (
-                          <span className="text-xs text-muted-foreground">
-                            Em breve
-                          </span>
-                        )}
+                        <span className="font-medium text-sm">{item.title}</span>
+                        {item.disabled && <span className="text-xs text-muted-foreground">Em breve</span>}
                       </div>
                     </Link>
-                  );
+                  )
                 })}
               </div>
             </ScrollArea>
@@ -167,5 +150,5 @@ export function MobileNav() {
         </Sheet>
       </div>
     </nav>
-  );
+  )
 }

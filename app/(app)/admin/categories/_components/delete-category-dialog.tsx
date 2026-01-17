@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { Loader2 } from "lucide-react"
+import { Loader2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
 interface DeleteCategoryDialogProps {
   open: boolean
@@ -33,7 +33,8 @@ export function DeleteCategoryDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja excluir a categoria <strong>{categoryName}</strong>? Esta ação não pode ser desfeita.
+            Tem certeza que deseja excluir a categoria <strong>{categoryName}</strong>? Esta ação
+            não pode ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

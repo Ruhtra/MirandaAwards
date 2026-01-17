@@ -1,15 +1,33 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useTheme } from "next-themes"
-import { Monitor, Moon, Sun, Bell, Shield, Palette, Globe, Mail, Lock, Sparkles, Zap } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Switch } from "@/components/ui/switch"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
+import { useState } from 'react'
+import { useTheme } from 'next-themes'
+import {
+  Monitor,
+  Moon,
+  Sun,
+  Bell,
+  Shield,
+  Palette,
+  Globe,
+  Mail,
+  Lock,
+  Sparkles,
+  Zap,
+} from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Switch } from '@/components/ui/switch'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 
 interface SettingsDialogProps {
   open: boolean
@@ -23,7 +41,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[85vh] p-0">
+      <DialogContent className="max-h-[85vh] max-w-2xl p-0">
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle className="text-2xl font-semibold">Configurações</DialogTitle>
           <DialogDescription>Personalize sua experiência no Miranda Awards</DialogDescription>
@@ -34,17 +52,21 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Theme Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Palette className="size-5 text-muted-foreground" />
+                <Palette className="text-muted-foreground size-5" />
                 <h3 className="text-lg font-semibold">Aparência</h3>
               </div>
               <div className="space-y-3">
-                <Label className="text-sm text-muted-foreground">Tema do aplicativo</Label>
-                <RadioGroup value={theme} onValueChange={setTheme} className="grid grid-cols-3 gap-3">
+                <Label className="text-muted-foreground text-sm">Tema do aplicativo</Label>
+                <RadioGroup
+                  value={theme}
+                  onValueChange={setTheme}
+                  className="grid grid-cols-3 gap-3"
+                >
                   <div>
                     <RadioGroupItem value="light" id="light" className="peer sr-only" />
                     <Label
                       htmlFor="light"
-                      className="flex flex-col items-center gap-2 rounded-lg border-2 border-muted bg-card p-4 hover:bg-accent cursor-pointer peer-data-[state=checked]:border-primary"
+                      className="border-muted bg-card hover:bg-accent peer-data-[state=checked]:border-primary flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-4"
                     >
                       <Sun className="size-5" />
                       <span className="text-sm font-medium">Claro</span>
@@ -54,7 +76,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     <RadioGroupItem value="dark" id="dark" className="peer sr-only" />
                     <Label
                       htmlFor="dark"
-                      className="flex flex-col items-center gap-2 rounded-lg border-2 border-muted bg-card p-4 hover:bg-accent cursor-pointer peer-data-[state=checked]:border-primary"
+                      className="border-muted bg-card hover:bg-accent peer-data-[state=checked]:border-primary flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-4"
                     >
                       <Moon className="size-5" />
                       <span className="text-sm font-medium">Escuro</span>
@@ -64,7 +86,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     <RadioGroupItem value="system" id="system" className="peer sr-only" />
                     <Label
                       htmlFor="system"
-                      className="flex flex-col items-center gap-2 rounded-lg border-2 border-muted bg-card p-4 hover:bg-accent cursor-pointer peer-data-[state=checked]:border-primary"
+                      className="border-muted bg-card hover:bg-accent peer-data-[state=checked]:border-primary flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-4"
                     >
                       <Monitor className="size-5" />
                       <span className="text-sm font-medium">Sistema</span>
@@ -79,7 +101,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Notifications Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Bell className="size-5 text-muted-foreground" />
+                <Bell className="text-muted-foreground size-5" />
                 <h3 className="text-lg font-semibold">Notificações</h3>
               </div>
               <div className="space-y-4">
@@ -88,16 +110,22 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     <Label htmlFor="notifications" className="text-sm font-medium">
                       Notificações push
                     </Label>
-                    <p className="text-xs text-muted-foreground">Receba notificações no navegador</p>
+                    <p className="text-muted-foreground text-xs">
+                      Receba notificações no navegador
+                    </p>
                   </div>
-                  <Switch id="notifications" checked={notifications} onCheckedChange={setNotifications} />
+                  <Switch
+                    id="notifications"
+                    checked={notifications}
+                    onCheckedChange={setNotifications}
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="email-notifications" className="text-sm font-medium">
                       Notificações por email
                     </Label>
-                    <p className="text-xs text-muted-foreground">Receba atualizações por email</p>
+                    <p className="text-muted-foreground text-xs">Receba atualizações por email</p>
                   </div>
                   <Switch
                     id="email-notifications"
@@ -113,19 +141,19 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Account Section */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Shield className="size-5 text-muted-foreground" />
+                <Shield className="text-muted-foreground size-5" />
                 <h3 className="text-lg font-semibold">Conta e Segurança</h3>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors cursor-pointer">
+                <div className="border-border hover:bg-accent/50 flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors">
                   <div className="flex items-center gap-3">
-                    <Lock className="size-4 text-muted-foreground" />
+                    <Lock className="text-muted-foreground size-4" />
                     <span className="text-sm font-medium">Alterar senha</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors cursor-pointer">
+                <div className="border-border hover:bg-accent/50 flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors">
                   <div className="flex items-center gap-3">
-                    <Mail className="size-4 text-muted-foreground" />
+                    <Mail className="text-muted-foreground size-4" />
                     <span className="text-sm font-medium">Alterar email</span>
                   </div>
                 </div>
@@ -137,13 +165,13 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Coming Soon Features */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Sparkles className="size-5 text-muted-foreground" />
+                <Sparkles className="text-muted-foreground size-5" />
                 <h3 className="text-lg font-semibold">Em Breve</h3>
               </div>
               <div className="space-y-3 opacity-50">
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                <div className="border-border flex items-center justify-between rounded-lg border p-3">
                   <div className="flex items-center gap-3">
-                    <Globe className="size-4 text-muted-foreground" />
+                    <Globe className="text-muted-foreground size-4" />
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">Idioma</span>
                       <Badge variant="secondary" className="text-xs">
@@ -152,9 +180,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                <div className="border-border flex items-center justify-between rounded-lg border p-3">
                   <div className="flex items-center gap-3">
-                    <Zap className="size-4 text-muted-foreground" />
+                    <Zap className="text-muted-foreground size-4" />
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">Atalhos de teclado</span>
                       <Badge variant="secondary" className="text-xs">
@@ -167,8 +195,8 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             </div>
 
             {/* App Version */}
-            <div className="pt-4 border-t border-border">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="border-border border-t pt-4">
+              <div className="text-muted-foreground flex items-center justify-between text-xs">
                 <span>Versão do aplicativo</span>
                 <span className="font-mono">v1.0.0</span>
               </div>

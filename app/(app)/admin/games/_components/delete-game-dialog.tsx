@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   AlertDialog,
@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
 interface DeleteGameDialogProps {
   open: boolean
@@ -19,14 +19,21 @@ interface DeleteGameDialogProps {
   isDeleting: boolean
 }
 
-export function DeleteGameDialog({ open, onOpenChange, onConfirm, gameName, isDeleting }: DeleteGameDialogProps) {
+export function DeleteGameDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+  gameName,
+  isDeleting,
+}: DeleteGameDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja deletar o jogo <strong>{gameName}</strong>? Esta ação não pode ser desfeita.
+            Tem certeza que deseja deletar o jogo <strong>{gameName}</strong>? Esta ação não pode
+            ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -36,7 +43,7 @@ export function DeleteGameDialog({ open, onOpenChange, onConfirm, gameName, isDe
             disabled={isDeleting}
             className="bg-destructive hover:bg-destructive/90"
           >
-            {isDeleting ? "Deletando..." : "Deletar"}
+            {isDeleting ? 'Deletando...' : 'Deletar'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

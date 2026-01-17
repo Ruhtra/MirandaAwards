@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import { useMemo, useState } from "react"
-import { UserGameFilters } from "../../../../components/personalized/votePage/user-game-filters"
-import { UserGameGrid } from "../../../../components/personalized/votePage/user-game-grid"
-import { GamesSkeleton } from "../../../../components/personalized/votePage/games-skeleton"
-import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
-import { useQuery } from "@tanstack/react-query"
+import { useMemo, useState } from 'react'
+import { UserGameFilters } from '../../../../components/personalized/votePage/user-game-filters'
+import { UserGameGrid } from '../../../../components/personalized/votePage/user-game-grid'
+import { GamesSkeleton } from '../../../../components/personalized/votePage/games-skeleton'
+import type { GameWithVotesAndCategoryDTO } from '@/lib/Dto/gameDTO'
+import { useQuery } from '@tanstack/react-query'
 
 export default function GamesPage() {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
   const [pendingOnly, setPendingOnly] = useState(false)
 
   const { data: games, isLoading } = useQuery<GameWithVotesAndCategoryDTO[]>({
-    queryKey: ["gamesToUser"],
+    queryKey: ['gamesToUser'],
     queryFn: async () => {
-      const response = await fetch("/api/WithVoteByuser")
-      if (!response.ok) throw new Error("Erro ao buscar jogos")
+      const response = await fetch('/api/WithVoteByuser')
+      if (!response.ok) throw new Error('Erro ao buscar jogos')
       return response.json()
     },
   })
@@ -42,10 +42,12 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 space-y-4 sm:space-y-6">
+    <div className="container mx-auto space-y-4 px-4 py-6 sm:space-y-6">
       <div className="space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Jogos</h1>
-        <p className="text-sm text-muted-foreground">Vote nos seus jogos favoritos em cada categoria</p>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Jogos</h1>
+        <p className="text-muted-foreground text-sm">
+          Vote nos seus jogos favoritos em cada categoria
+        </p>
       </div>
 
       <UserGameFilters

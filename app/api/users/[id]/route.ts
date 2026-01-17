@@ -1,28 +1,25 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { updateUserSchema } from "@/lib/validations/user"
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { updateUserSchema } from '@/lib/validations/user'
 // import bcrypt from "bcrypt"
-import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
+import { headers } from 'next/headers'
+import { auth } from '@/lib/auth'
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-
     const session = {
       user: {
-        role: "ADMIN"
-      }
-
+        role: 'ADMIN',
+      },
     }
 
-
-    if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const { id } = await params
     if (!id) {
-      return NextResponse.json({ error: "ID do usuário é obrigatório" }, { status: 400 })
+      return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
     }
 
     const user = await prisma.user.findUnique({
@@ -38,41 +35,42 @@ export async function GET(request: Request, { params }: { params: { id: string }
     })
 
     if (!user) {
-      return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
     }
 
     return NextResponse.json(user)
   } catch (error) {
-    console.error("[v0] Erro ao buscar usuário:", error)
-    return NextResponse.json({ error: "Erro ao buscar usuário" }, { status: 500 })
+    console.error('[v0] Erro ao buscar usuário:', error)
+    return NextResponse.json({ error: 'Erro ao buscar usuário' }, { status: 500 })
   }
 }
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-
     const session = await auth.api.getSession({
       headers: await headers(),
     })
 
-    if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const { id } = await params
     if (!id) {
-      return NextResponse.json({ error: "ID do usuário é obrigatório" }, { status: 400 })
+      return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
     }
 
     const body = await request.json()
     const validated = updateUserSchema.safeParse(body)
 
     if (!validated.success) {
-      return NextResponse.json({ error: "Dados inválidos", details: validated.error.issues }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Dados inválidos', details: validated.error.issues },
+        { status: 400 },
+      )
     }
 
     const { name, email, password, role } = validated.data
-
 
     // const { password: oldpassword } = await prisma.account.findFirstOrThrow({
     //   where: { userId: id, providerId: "credential" },
@@ -102,39 +100,35 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         data: {
           name: name,
           password: password,
-          email: email
-
-        }
+          email: email,
+        },
       },
       headers: await headers(),
-    });
+    })
 
     return NextResponse.json(user)
   } catch (error: any) {
-    console.error("[v0] Erro ao atualizar usuário:", error)
-    console.error("[v0] Erro ao atualizar usuário:", error.body)
-    return NextResponse.json({ error: "Erro ao atualizar usuário" }, { status: 500 })
+    console.error('[v0] Erro ao atualizar usuário:', error)
+    console.error('[v0] Erro ao atualizar usuário:', error.body)
+    return NextResponse.json({ error: 'Erro ao atualizar usuário' }, { status: 500 })
   }
 }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-
     const session = {
       user: {
-        role: "ADMIN"
-      }
-
+        role: 'ADMIN',
+      },
     }
 
-
-    if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const { id } = await params
     if (!id) {
-      return NextResponse.json({ error: "ID do usuário é obrigatório" }, { status: 400 })
+      return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
     }
 
     await prisma.user.delete({
@@ -143,7 +137,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[v0] Erro ao deletar usuário:", error)
-    return NextResponse.json({ error: "Erro ao deletar usuário" }, { status: 500 })
+    console.error('[v0] Erro ao deletar usuário:', error)
+    return NextResponse.json({ error: 'Erro ao deletar usuário' }, { status: 500 })
   }
 }

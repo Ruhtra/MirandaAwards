@@ -1,11 +1,17 @@
-"use client"
+'use client'
 
-import { Search, Filter } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, Filter } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface GameFiltersProps {
   searchQuery: string
@@ -27,7 +33,7 @@ export function GameFilters({
   return (
     <div className="flex gap-2">
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           placeholder="Buscar por nome..."
           value={searchQuery}
@@ -43,7 +49,7 @@ export function GameFilters({
           </Button>
         </SheetTrigger>
         <SheetContent side="right" className="w-80 p-4">
-          <SheetHeader className=" p-0">
+          <SheetHeader className="p-0">
             <SheetTitle>Filtros</SheetTitle>
           </SheetHeader>
 

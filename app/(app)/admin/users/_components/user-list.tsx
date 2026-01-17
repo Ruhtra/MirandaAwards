@@ -1,18 +1,23 @@
-"use client"
+'use client'
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Edit, Trash2, Shield, UserIcon, MoreVertical } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
-import { DeleteUserDialog } from "./delete-user-dialog"
-import { UserListSkeleton } from "./user-list-skeleton"
-import { useState, useMemo } from "react"
-import type { User } from "@/lib/types"
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Edit, Trash2, Shield, UserIcon, MoreVertical } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Badge } from '@/components/ui/badge'
+import { useToast } from '@/hooks/use-toast'
+import { DeleteUserDialog } from './delete-user-dialog'
+import { UserListSkeleton } from './user-list-skeleton'
+import { useState, useMemo } from 'react'
+import type { User } from '@/lib/types'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface UserListProps {
   onEditUser: (userId: string) => void
@@ -28,10 +33,10 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
 
   // Fetch users
   const { data: users, isLoading } = useQuery<User[]>({
-    queryKey: ["users"],
+    queryKey: ['users'],
     queryFn: async () => {
-      const response = await fetch("/api/users")
-      if (!response.ok) throw new Error("Erro ao buscar usuários")
+      const response = await fetch('/api/users')
+      if (!response.ok) throw new Error('Erro ao buscar usuários')
       return response.json()
     },
   })
@@ -43,11 +48,11 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
       // Search filter (name or email)
       const matchesSearch = searchQuery
         ? user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+          user.email.toLowerCase().includes(searchQuery.toLowerCase())
         : true
 
       // Role filter
-      const matchesRole = roleFilter === "all" ? true : user.role === roleFilter
+      const matchesRole = roleFilter === 'all' ? true : user.role === roleFilter
 
       return matchesSearch && matchesRole
     })
@@ -57,25 +62,25 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
   const deleteMutation = useMutation({
     mutationFn: async (userId: string) => {
       const response = await fetch(`/api/users/${userId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       })
-      if (!response.ok) throw new Error("Erro ao deletar usuário")
+      if (!response.ok) throw new Error('Erro ao deletar usuário')
       return response.json()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
+      queryClient.invalidateQueries({ queryKey: ['users'] })
       toast({
-        title: "Usuário deletado",
-        description: "O usuário foi removido com sucesso",
+        title: 'Usuário deletado',
+        description: 'O usuário foi removido com sucesso',
       })
       setDeleteDialogOpen(false)
       setUserToDelete(null)
     },
     onError: () => {
       toast({
-        title: "Erro ao deletar",
-        description: "Não foi possível deletar o usuário",
-        variant: "destructive",
+        title: 'Erro ao deletar',
+        description: 'Não foi possível deletar o usuário',
+        variant: 'destructive',
       })
     },
   })
@@ -100,16 +105,18 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
       <Card className="glass-card p-8">
         <Empty>
           <EmptyMedia>
-            <UserIcon className="size-12 text-muted-foreground" />
+            <UserIcon className="text-muted-foreground size-12" />
           </EmptyMedia>
           <EmptyHeader>
             <EmptyTitle>
-              {searchQuery || roleFilter !== "all" ? "Nenhum usuário encontrado" : "Nenhum usuário cadastrado"}
+              {searchQuery || roleFilter !== 'all'
+                ? 'Nenhum usuário encontrado'
+                : 'Nenhum usuário cadastrado'}
             </EmptyTitle>
             <EmptyDescription>
-              {searchQuery || roleFilter !== "all"
-                ? "Tente ajustar os filtros de busca"
-                : "Comece criando seu primeiro usuário do sistema"}
+              {searchQuery || roleFilter !== 'all'
+                ? 'Tente ajustar os filtros de busca'
+                : 'Comece criando seu primeiro usuário do sistema'}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
@@ -119,24 +126,27 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
 
   return (
     <>
-      <Card className="glass-card overflow-hidden h-full py-0">
+      <Card className="glass-card h-full overflow-hidden py-0">
         <ScrollArea className="h-full">
-          <div className="divide-y divide-border">
+          <div className="divide-border divide-y">
             {filteredUsers.map((user) => (
-              <div key={user.id} className="p-3 hover:bg-accent/30 transition-colors">
+              <div key={user.id} className="hover:bg-accent/30 p-3 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="size-9 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
-                    <UserIcon className="size-4 text-primary" />
+                  <div className="from-primary/20 to-accent/20 flex size-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br">
+                    <UserIcon className="text-primary size-4" />
                   </div>
 
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground truncate">{user.name}</h3>
-                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-foreground truncate font-semibold">{user.name}</h3>
+                    <p className="text-muted-foreground truncate text-xs">{user.email}</p>
                   </div>
 
-                  <Badge variant={user.role === "ADMIN" ? "default" : "secondary"} className="gap-1 flex-shrink-0">
+                  <Badge
+                    variant={user.role === 'ADMIN' ? 'default' : 'secondary'}
+                    className="flex-shrink-0 gap-1"
+                  >
                     <Shield className="size-3" />
-                    {user.role === "ADMIN" ? "Admin" : "User"}
+                    {user.role === 'ADMIN' ? 'Admin' : 'User'}
                   </Badge>
 
                   <DropdownMenu>
@@ -150,7 +160,10 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
                         <Edit className="size-4" />
                         Editar
                       </DropdownMenuItem>
-                      <DropdownMenuItem variant="destructive" onClick={() => handleDeleteClick(user)}>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onClick={() => handleDeleteClick(user)}
+                      >
                         <Trash2 className="size-4" />
                         Deletar
                       </DropdownMenuItem>
@@ -167,7 +180,7 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onConfirm={handleDeleteConfirm}
-        userName={userToDelete?.name || ""}
+        userName={userToDelete?.name || ''}
         isDeleting={deleteMutation.isPending}
       />
     </>

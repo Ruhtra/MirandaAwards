@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 // import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginInput } from "@/lib/validations/user";
-import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { loginSchema, type LoginInput } from '@/lib/validations/user'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,30 +14,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Trophy, Gamepad2, Zap } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
-import { useToast } from "@/hooks/use-toast";
-import { signIn } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Trophy, Gamepad2, Zap } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
+import { useToast } from '@/hooks/use-toast'
+import { signIn } from '@/lib/auth-client'
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-  });
+  })
 
   const onSubmit = async (data: LoginInput) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
       await signIn.email(
@@ -47,74 +46,74 @@ export default function LoginPage() {
         },
         {
           onRequest: (ctx) => {
-            setIsLoading(true);
+            setIsLoading(true)
           },
           onResponse: (ctx) => {
             // setIsLoading(false);
           },
           onError: (ctx) => {
             toast({
-              title: "Erro de autenticação",
-              description: "Credenciais inválidas. Por favor, tente novamente.",
-              variant: "destructive",
-            });
+              title: 'Erro de autenticação',
+              description: 'Credenciais inválidas. Por favor, tente novamente.',
+              variant: 'destructive',
+            })
+
+            setIsLoading(false)
           },
 
           onSuccess: async (ctx) => {
-
-            const role = ctx.data.user.role;
+            const role = ctx.data.user.role
 
             toast({
-              title: "Login bem-sucedido",
-              description: "Você foi autenticado com sucesso!",
-            });
+              title: 'Login bem-sucedido',
+              description: 'Você foi autenticado com sucesso!',
+            })
 
-            if (role === "ADMIN") {
-              await router.push(DEFAULT_LOGIN_REDIRECT.ADMIN);
-            } else if (role === "USER") {
-              await router.push(DEFAULT_LOGIN_REDIRECT.USER);
+            if (role === 'ADMIN') {
+              await router.push(DEFAULT_LOGIN_REDIRECT.ADMIN)
+            } else if (role === 'USER') {
+              await router.push(DEFAULT_LOGIN_REDIRECT.USER)
             }
-
           },
-        }
-      );
+        },
+      )
     } catch (error) {
-      console.error("[v0] Erro ao fazer login:", error);
+      console.error('[v0] Erro ao fazer login:', error)
       toast({
-        title: "Erro",
-        description: "Ocorreu um erro ao fazer login",
-        variant: "destructive",
-      });
-      setIsLoading(false);
+        title: 'Erro',
+        description: 'Ocorreu um erro ao fazer login',
+        variant: 'destructive',
+      })
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+    <div className="bg-background relative flex min-h-screen items-center justify-center overflow-hidden p-4">
       {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 size-64 bg-primary/10 rounded-full blur-[100px] animate-pulse" />
-        <div className="absolute bottom-20 right-10 size-96 bg-accent/10 rounded-full blur-[120px] animate-pulse delay-700" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="bg-primary/10 absolute top-20 left-10 size-64 animate-pulse rounded-full blur-[100px]" />
+        <div className="bg-accent/10 absolute right-10 bottom-20 size-96 animate-pulse rounded-full blur-[120px] delay-700" />
       </div>
 
-      <div className="w-full max-w-md space-y-8 relative z-10">
+      <div className="relative z-10 w-full max-w-md space-y-8">
         {/* Logo and branding */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center mb-6">
+        <div className="space-y-4 text-center">
+          <div className="mb-6 flex justify-center">
             <div className="relative">
-              <div className="size-20 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center glow-primary animate-pulse">
-                <Trophy className="size-10 text-primary-foreground" />
+              <div className="from-primary via-primary to-accent glow-primary flex size-20 animate-pulse items-center justify-center rounded-2xl bg-gradient-to-br">
+                <Trophy className="text-primary-foreground size-10" />
               </div>
-              <div className="absolute -top-1 -right-1 size-6 rounded-full bg-accent flex items-center justify-center glow-accent">
-                <Zap className="size-4 text-accent-foreground" />
+              <div className="bg-accent glow-accent absolute -top-1 -right-1 flex size-6 items-center justify-center rounded-full">
+                <Zap className="text-accent-foreground size-4" />
               </div>
             </div>
           </div>
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent mb-2">
+            <h1 className="from-primary via-primary to-accent mb-2 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
               Miranda Awards
             </h1>
-            <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
+            <p className="text-muted-foreground flex items-center justify-center gap-2 text-sm">
               <Gamepad2 className="size-4" />
               Seu Game Awards Personalizado
             </p>
@@ -122,11 +121,9 @@ export default function LoginPage() {
         </div>
 
         {/* Login form card */}
-        <div className="glass-card rounded-2xl shadow-2xl p-8 border-2">
+        <div className="glass-card rounded-2xl border-2 p-8 shadow-2xl">
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">
-              Acesso
-            </h2>
+            <h2 className="text-foreground mb-2 text-2xl font-semibold">Acesso</h2>
             <p className="text-muted-foreground text-sm">
               Entre com suas credenciais para continuar
             </p>
@@ -139,14 +136,12 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground font-medium">
-                      Email
-                    </FormLabel>
+                    <FormLabel className="text-foreground font-medium">Email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="admin@mirandaawards.com"
-                        className="h-11 bg-input/50 border-border focus:border-primary transition-all"
+                        className="bg-input/50 border-border focus:border-primary h-11 transition-all"
                         {...field}
                       />
                     </FormControl>
@@ -160,14 +155,12 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground font-medium">
-                      Senha
-                    </FormLabel>
+                    <FormLabel className="text-foreground font-medium">Senha</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder="••••••••"
-                        className="h-11 bg-input/50 border-border focus:border-primary transition-all"
+                        className="bg-input/50 border-border focus:border-primary h-11 transition-all"
                         {...field}
                       />
                     </FormControl>
@@ -178,17 +171,17 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                className="w-full h-11 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all font-semibold text-base glow-primary mt-6"
+                className="from-primary to-accent glow-primary mt-6 h-11 w-full bg-gradient-to-r text-base font-semibold transition-all hover:opacity-90"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
-                    <Spinner className="size-4 mr-2" />
+                    <Spinner className="mr-2 size-4" />
                     Entrando...
                   </>
                 ) : (
                   <>
-                    <Trophy className="size-4 mr-2" />
+                    <Trophy className="mr-2 size-4" />
                     Entrar no Painel
                   </>
                 )}
@@ -198,11 +191,10 @@ export default function LoginPage() {
         </div>
 
         {/* Footer text */}
-        <p className="text-center text-xs text-muted-foreground">
-          Feito com <span className="text-primary">♥</span> para gamers
-          apaixonados
+        <p className="text-muted-foreground text-center text-xs">
+          Feito com <span className="text-primary">♥</span> para gamers apaixonados
         </p>
       </div>
     </div>
-  );
+  )
 }

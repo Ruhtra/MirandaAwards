@@ -1,13 +1,20 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Check, ChevronsUpDown, X, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import type { CategoryDTO } from "@/lib/Dto/gameDTO"
+import { useState } from 'react'
+import { Check, ChevronsUpDown, X, Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import type { CategoryDTO } from '@/lib/Dto/gameDTO'
 
 interface CategorySelectorComboboxProps {
   categories: CategoryDTO[]
@@ -15,7 +22,11 @@ interface CategorySelectorComboboxProps {
   onChange: (selectedIds: string[]) => void
 }
 
-export function CategorySelectorCombobox({ categories, selectedIds, onChange }: CategorySelectorComboboxProps) {
+export function CategorySelectorCombobox({
+  categories,
+  selectedIds,
+  onChange,
+}: CategorySelectorComboboxProps) {
   const [open, setOpen] = useState(false)
 
   const selectedCategories = categories.filter((cat) => selectedIds.includes(cat.id))
@@ -45,9 +56,15 @@ export function CategorySelectorCombobox({ categories, selectedIds, onChange }: 
           {selectedIds.length > 0 && (
             <>
               <Badge variant="secondary" className="font-normal">
-                {selectedIds.length} selecionada{selectedIds.length !== 1 && "s"}
+                {selectedIds.length} selecionada{selectedIds.length !== 1 && 's'}
               </Badge>
-              <Button type="button" variant="ghost" size="sm" onClick={clearAll} className="h-7 text-xs">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={clearAll}
+                className="h-7 text-xs"
+              >
                 Limpar
               </Button>
             </>
@@ -61,9 +78,9 @@ export function CategorySelectorCombobox({ categories, selectedIds, onChange }: 
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between h-auto min-h-10 bg-transparent"
+            className="h-auto min-h-10 w-full justify-between bg-transparent"
           >
-            <div className="flex flex-wrap gap-1.5 flex-1">
+            <div className="flex flex-1 flex-wrap gap-1.5">
               {selectedCategories.length > 0 ? (
                 selectedCategories.slice(0, 3).map((cat) => (
                   <Badge key={cat.id} variant="secondary" className="font-normal">
@@ -98,7 +115,10 @@ export function CategorySelectorCombobox({ categories, selectedIds, onChange }: 
                     className="cursor-pointer"
                   >
                     <Check
-                      className={cn("mr-2 h-4 w-4", selectedIds.includes(category.id) ? "opacity-100" : "opacity-0")}
+                      className={cn(
+                        'mr-2 h-4 w-4',
+                        selectedIds.includes(category.id) ? 'opacity-100' : 'opacity-0',
+                      )}
                     />
                     {category.name}
                   </CommandItem>

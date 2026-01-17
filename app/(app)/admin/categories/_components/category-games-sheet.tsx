@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
-import Image from "next/image"
-import type { CategoryWithGamesDTO } from "@/lib/Dto/categoryDTO"
+import { useState } from 'react'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Badge } from '@/components/ui/badge'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Input } from '@/components/ui/input'
+import { Search } from 'lucide-react'
+import Image from 'next/image'
+import type { CategoryWithGamesDTO } from '@/lib/Dto/categoryDTO'
 
 interface CategoryGamesSheetProps {
   category: CategoryWithGamesDTO
@@ -15,10 +15,11 @@ interface CategoryGamesSheetProps {
 
 export function CategoryGamesSheet({ category }: CategoryGamesSheetProps) {
   const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
   const gamesCount = category._count?.games ?? 0
 
-  const filteredGames = category.games?.filter((game) => game.name.toLowerCase().includes(search.toLowerCase())) ?? []
+  const filteredGames =
+    category.games?.filter((game) => game.name.toLowerCase().includes(search.toLowerCase())) ?? []
 
   if (gamesCount === 0) {
     return (
@@ -32,19 +33,22 @@ export function CategoryGamesSheet({ category }: CategoryGamesSheetProps) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button className="inline-flex">
-          <Badge variant="secondary" className="text-xs cursor-pointer hover:bg-secondary/80 transition-colors">
-            {gamesCount} {gamesCount === 1 ? "jogo" : "jogos"}
+          <Badge
+            variant="secondary"
+            className="hover:bg-secondary/80 cursor-pointer text-xs transition-colors"
+          >
+            {gamesCount} {gamesCount === 1 ? 'jogo' : 'jogos'}
           </Badge>
         </button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md p-2">
+      <SheetContent className="w-full p-2 sm:max-w-md">
         <SheetHeader className="p-0">
           <SheetTitle>{category.name}</SheetTitle>
         </SheetHeader>
 
         <div className="space-y-4 py-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
             <Input
               placeholder="Buscar jogos..."
               value={search}
@@ -56,29 +60,35 @@ export function CategoryGamesSheet({ category }: CategoryGamesSheetProps) {
           <ScrollArea className="h-[calc(100vh-200px)]">
             <div className="space-y-2 pr-4">
               {filteredGames.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">Nenhum jogo encontrado</p>
+                <p className="text-muted-foreground py-8 text-center text-sm">
+                  Nenhum jogo encontrado
+                </p>
               ) : (
                 filteredGames.map((game) => (
                   <div
                     key={game.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                    className="bg-card hover:bg-accent/50 flex items-center gap-3 rounded-lg border p-3 transition-colors"
                   >
                     {game.image_url ? (
                       <Image
-                        src={game.image_url || "/placeholder.svg"}
+                        src={game.image_url || '/placeholder.svg'}
                         alt={game.name}
                         width={48}
                         height={48}
-                        className="size-12 rounded object-cover flex-shrink-0"
+                        className="size-12 flex-shrink-0 rounded object-cover"
                       />
                     ) : (
-                      <div className="size-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-medium text-muted-foreground">{game.name.charAt(0)}</span>
+                      <div className="bg-muted flex size-12 flex-shrink-0 items-center justify-center rounded">
+                        <span className="text-muted-foreground text-sm font-medium">
+                          {game.name.charAt(0)}
+                        </span>
                       </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{game.name}</p>
-                      <p className="text-xs text-muted-foreground">{/*game.platform*/ 'platform'}</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{game.name}</p>
+                      <p className="text-muted-foreground text-xs">
+                        {/*game.platform*/ 'platform'}
+                      </p>
                     </div>
                   </div>
                 ))

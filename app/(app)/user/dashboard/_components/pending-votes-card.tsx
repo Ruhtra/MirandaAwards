@@ -1,38 +1,32 @@
-import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowRight } from "lucide-react";
-import Image from "next/image";
+import Link from 'next/link'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Clock, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 export function PendingVotesCard() {
   // Mock data - substituir por dados reais da API
   const pendingGames = [
     {
-      id: "1",
-      name: "The Legend of Zelda: Tears of the Kingdom",
-      image_url: "/heroic-elf-princess.png",
+      id: '1',
+      name: 'The Legend of Zelda: Tears of the Kingdom',
+      image_url: '/heroic-elf-princess.png',
       pendingCategories: 8,
     },
     {
-      id: "2",
+      id: '2',
       name: "Baldur's Gate 3",
-      image_url: "/baldurs-gate.jpg",
+      image_url: '/baldurs-gate.jpg',
       pendingCategories: 5,
     },
     {
-      id: "3",
-      name: "Spider-Man 2",
-      image_url: "/spiderman.jpg",
+      id: '3',
+      name: 'Spider-Man 2',
+      image_url: '/spiderman.jpg',
       pendingCategories: 8,
     },
-  ];
+  ]
 
   if (pendingGames.length === 0) {
     return (
@@ -42,12 +36,10 @@ export function PendingVotesCard() {
             <Clock className="size-5" />
             Votos Pendentes
           </CardTitle>
-          <CardDescription>
-            Você não tem votos pendentes no momento
-          </CardDescription>
+          <CardDescription>Você não tem votos pendentes no momento</CardDescription>
         </CardHeader>
       </Card>
-    );
+    )
   }
 
   return (
@@ -64,7 +56,7 @@ export function PendingVotesCard() {
           <Link href="/user/games?filter=pending">
             <Button variant="ghost" size="sm">
               Ver todos
-              <ArrowRight className="size-4 ml-1" />
+              <ArrowRight className="ml-1 size-4" />
             </Button>
           </Link>
         </div>
@@ -73,20 +65,18 @@ export function PendingVotesCard() {
         <div className="space-y-3">
           {pendingGames.map((game) => (
             <Link key={game.id} href={`/games?vote=${game.id}`}>
-              <div className="flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent transition-colors">
-                <div className="relative size-16 flex-shrink-0 rounded-md overflow-hidden bg-muted">
+              <div className="bg-card hover:bg-accent flex items-center gap-3 rounded-lg border p-3 transition-colors">
+                <div className="bg-muted relative size-16 flex-shrink-0 overflow-hidden rounded-md">
                   <Image
-                    src={game.image_url || "/placeholder.svg"}
+                    src={game.image_url || '/placeholder.svg'}
                     alt={game.name}
                     fill
                     className="object-cover"
                   />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-sm line-clamp-1">
-                    {game.name}
-                  </h4>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                <div className="min-w-0 flex-1">
+                  <h4 className="line-clamp-1 text-sm font-medium">{game.name}</h4>
+                  <p className="text-muted-foreground mt-0.5 text-xs">
                     {game.pendingCategories} categorias pendentes
                   </p>
                 </div>
@@ -99,5 +89,5 @@ export function PendingVotesCard() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

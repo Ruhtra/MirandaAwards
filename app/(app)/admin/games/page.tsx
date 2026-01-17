@@ -1,21 +1,21 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { PageHeader } from "../users/_components/page-header"
-import { GameFilters } from "./_components/game-filters"
-import { GameGrid } from "./_components/game-grid"
-import { CreateGameSheet } from "./_components/create-game-sheet"
-import { EditGameSheet } from "./_components/edit-game-sheet"
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { PageHeader } from '../users/_components/page-header'
+import { GameFilters } from './_components/game-filters'
+import { GameGrid } from './_components/game-grid'
+import { CreateGameSheet } from './_components/create-game-sheet'
+import { EditGameSheet } from './_components/edit-game-sheet'
 
 export default function GamesPage() {
   const [createSheetOpen, setCreateSheetOpen] = useState(false)
   const [editSheetOpen, setEditSheetOpen] = useState(false)
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [publishedFilter, setPublishedFilter] = useState("all")
-  const [categoryFilter, setCategoryFilter] = useState("all")
+  const [searchQuery, setSearchQuery] = useState('')
+  const [publishedFilter, setPublishedFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
 
   const handleEditGame = (gameId: string) => {
     setSelectedGameId(gameId)
@@ -30,11 +30,11 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="flex h-full flex-col gap-4">
       <PageHeader
         title="Jogos"
         action={
-          <Button onClick={() => setCreateSheetOpen(true)} className="w-full md:w-auto gap-2">
+          <Button onClick={() => setCreateSheetOpen(true)} className="w-full gap-2 md:w-auto">
             <Plus className="size-4" />
             Novo Jogo
           </Button>
@@ -62,7 +62,11 @@ export default function GamesPage() {
       <CreateGameSheet open={createSheetOpen} onOpenChange={setCreateSheetOpen} />
 
       {selectedGameId && (
-        <EditGameSheet open={editSheetOpen} onOpenChange={handleCloseEditSheet} gameId={selectedGameId} />
+        <EditGameSheet
+          open={editSheetOpen}
+          onOpenChange={handleCloseEditSheet}
+          gameId={selectedGameId}
+        />
       )}
     </div>
   )

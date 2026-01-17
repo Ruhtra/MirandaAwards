@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { AlertCircle } from "lucide-react"
+import { AlertCircle } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +10,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Spinner } from "@/components/ui/spinner"
+} from '@/components/ui/alert-dialog'
+import { Spinner } from '@/components/ui/spinner'
 
 interface DeleteUserDialogProps {
   open: boolean
@@ -21,20 +21,27 @@ interface DeleteUserDialogProps {
   isDeleting: boolean
 }
 
-export function DeleteUserDialog({ open, onOpenChange, onConfirm, userName, isDeleting }: DeleteUserDialogProps) {
+export function DeleteUserDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+  userName,
+  isDeleting,
+}: DeleteUserDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="glass-card">
         <AlertDialogHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="size-10 rounded-lg bg-destructive/10 flex items-center justify-center">
-              <AlertCircle className="size-5 text-destructive" />
+          <div className="mb-2 flex items-center gap-3">
+            <div className="bg-destructive/10 flex size-10 items-center justify-center rounded-lg">
+              <AlertCircle className="text-destructive size-5" />
             </div>
             <AlertDialogTitle className="text-xl">Confirmar Exclusão</AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-base pt-2">
-            Tem certeza que deseja excluir o usuário <span className="font-semibold text-foreground">{userName}</span>?
-            Esta ação não pode ser desfeita.
+          <AlertDialogDescription className="pt-2 text-base">
+            Tem certeza que deseja excluir o usuário{' '}
+            <span className="text-foreground font-semibold">{userName}</span>? Esta ação não pode
+            ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -46,11 +53,11 @@ export function DeleteUserDialog({ open, onOpenChange, onConfirm, userName, isDe
           >
             {isDeleting ? (
               <>
-                <Spinner className="size-4 mr-2" />
+                <Spinner className="mr-2 size-4" />
                 Excluindo...
               </>
             ) : (
-              "Excluir"
+              'Excluir'
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

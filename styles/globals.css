@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -77,8 +77,8 @@
 }
 
 @theme inline {
-  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback";
-  --font-mono: "IBM Plex Mono", "IBM Plex Mono Fallback";
+  --font-sans: 'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback';
+  --font-mono: 'IBM Plex Mono', 'IBM Plex Mono Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -115,7 +115,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-serif: "Lora", "Lora Fallback";
+  --font-serif: 'Lora', 'Lora Fallback';
 }
 
 @layer base {
@@ -140,7 +140,9 @@
 
   /* Clean hover states */
   .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   .hover-lift:hover {

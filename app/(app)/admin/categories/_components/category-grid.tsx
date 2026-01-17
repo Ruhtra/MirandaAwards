@@ -1,63 +1,63 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { Plus, LayoutGrid, List, Table2, Layers, Grid3x3 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { CategoryFilters } from "./category-filters"
-import { CreateCategorySheet } from "./create-category-sheet"
-import { EditCategorySheet } from "./edit-category-sheet"
-import { DeleteCategoryDialog } from "./delete-category-dialog"
-import type { CategoryWithGamesDTO } from "@/lib/Dto/categoryDTO"
-import { useToast } from "@/hooks/use-toast"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { CategoryViewCompactList } from "./category-view-compact-list"
-import { CategoryViewTable } from "./category-view-table"
-import { CategoryViewDenseGrid } from "./category-view-dense-grid"
-import { CategoryViewAccordion } from "./category-view-accordion"
-import { CategoryViewBento } from "./category-view-bento"
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Plus, LayoutGrid, List, Table2, Layers, Grid3x3 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { CategoryFilters } from './category-filters'
+import { CreateCategorySheet } from './create-category-sheet'
+import { EditCategorySheet } from './edit-category-sheet'
+import { DeleteCategoryDialog } from './delete-category-dialog'
+import type { CategoryWithGamesDTO } from '@/lib/Dto/categoryDTO'
+import { useToast } from '@/hooks/use-toast'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { CategoryViewCompactList } from './category-view-compact-list'
+import { CategoryViewTable } from './category-view-table'
+import { CategoryViewDenseGrid } from './category-view-dense-grid'
+import { CategoryViewAccordion } from './category-view-accordion'
+import { CategoryViewBento } from './category-view-bento'
 
-type ViewMode = "bento" | "dense-grid" | "list" | "table" | "accordion"
+type ViewMode = 'bento' | 'dense-grid' | 'list' | 'table' | 'accordion'
 
 export function CategoryGrid() {
-  const [search, setSearch] = useState("")
-  const [minGames, setMinGames] = useState("")
-  const [maxGames, setMaxGames] = useState("")
+  const [search, setSearch] = useState('')
+  const [minGames, setMinGames] = useState('')
+  const [maxGames, setMaxGames] = useState('')
   const [createOpen, setCreateOpen] = useState(false)
   const [editCategory, setEditCategory] = useState<CategoryWithGamesDTO | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [categoryToDelete, setCategoryToDelete] = useState<CategoryWithGamesDTO | null>(null)
-  const [viewMode, setViewMode] = useState<ViewMode>("bento")
+  const [viewMode, setViewMode] = useState<ViewMode>('bento')
 
   const queryClient = useQueryClient()
   const { toast } = useToast()
 
   const { data: categories = [], isLoading } = useQuery<CategoryWithGamesDTO[]>({
-    queryKey: ["categories"],
+    queryKey: ['categories'],
     queryFn: async () => {
-      const res = await fetch("/api/categories/withGames")
-      if (!res.ok) throw new Error("Failed to fetch categories")
+      const res = await fetch('/api/categories/withGames')
+      if (!res.ok) throw new Error('Failed to fetch categories')
       return res.json()
     },
   })
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/categories/${id}`, { method: "DELETE" })
+      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' })
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data?.error || "Failed to delete category")
+        throw new Error(data?.error || 'Failed to delete category')
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] })
-      toast({ title: "Categoria excluída com sucesso" })
+      queryClient.invalidateQueries({ queryKey: ['categories'] })
+      toast({ title: 'Categoria excluída com sucesso' })
       setDeleteDialogOpen(false)
       setCategoryToDelete(null)
     },
     onError: (error: Error) => {
-      toast({ title: "Erro ao excluir categoria, err: " + error.message, variant: "destructive" })
+      toast({ title: 'Erro ao excluir categoria, err: ' + error.message, variant: 'destructive' })
     },
   })
 
@@ -73,8 +73,8 @@ export function CategoryGrid() {
   }
 
   const handleClearFilters = () => {
-    setMinGames("")
-    setMaxGames("")
+    setMinGames('')
+    setMaxGames('')
   }
 
   const filteredCategories = categories.filter((category) => {
@@ -96,13 +96,13 @@ export function CategoryGrid() {
   })
 
   if (isLoading) {
-    return <div className="text-center py-12 text-muted-foreground">Carregando...</div>
+    return <div className="text-muted-foreground py-12 text-center">Carregando...</div>
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-        <div className="flex-1 w-full">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="w-full flex-1">
           <CategoryFilters
             search={search}
             onSearchChange={setSearch}
@@ -114,7 +114,7 @@ export function CategoryGrid() {
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           <ToggleGroup
             type="single"
             value={viewMode}
@@ -138,7 +138,7 @@ export function CategoryGrid() {
             </ToggleGroupItem>
           </ToggleGroup>
 
-          <Button onClick={() => setCreateOpen(true)} className="shrink-0 w-full sm:w-auto">
+          <Button onClick={() => setCreateOpen(true)} className="w-full shrink-0 sm:w-auto">
             <Plus className="mr-2 size-4" />
             Nova Categoria
           </Button>
@@ -146,34 +146,42 @@ export function CategoryGrid() {
       </div>
 
       {filteredCategories.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className="text-muted-foreground py-12 text-center">
           {search || minGames || maxGames
-            ? "Nenhuma categoria encontrada com os filtros aplicados"
-            : "Nenhuma categoria cadastrada"}
+            ? 'Nenhuma categoria encontrada com os filtros aplicados'
+            : 'Nenhuma categoria cadastrada'}
         </div>
       ) : (
         <>
-          {viewMode === "bento" && (
-            <CategoryViewBento categories={filteredCategories} onEdit={setEditCategory} onDelete={handleDeleteClick} />
+          {viewMode === 'bento' && (
+            <CategoryViewBento
+              categories={filteredCategories}
+              onEdit={setEditCategory}
+              onDelete={handleDeleteClick}
+            />
           )}
-          {viewMode === "dense-grid" && (
+          {viewMode === 'dense-grid' && (
             <CategoryViewDenseGrid
               categories={filteredCategories}
               onEdit={setEditCategory}
               onDelete={handleDeleteClick}
             />
           )}
-          {viewMode === "list" && (
+          {viewMode === 'list' && (
             <CategoryViewCompactList
               categories={filteredCategories}
               onEdit={setEditCategory}
               onDelete={handleDeleteClick}
             />
           )}
-          {viewMode === "table" && (
-            <CategoryViewTable categories={filteredCategories} onEdit={setEditCategory} onDelete={handleDeleteClick} />
+          {viewMode === 'table' && (
+            <CategoryViewTable
+              categories={filteredCategories}
+              onEdit={setEditCategory}
+              onDelete={handleDeleteClick}
+            />
           )}
-          {viewMode === "accordion" && (
+          {viewMode === 'accordion' && (
             <CategoryViewAccordion
               categories={filteredCategories}
               onEdit={setEditCategory}
@@ -195,7 +203,7 @@ export function CategoryGrid() {
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onConfirm={handleDeleteConfirm}
-        categoryName={categoryToDelete?.name || ""}
+        categoryName={categoryToDelete?.name || ''}
         isDeleting={deleteMutation.isPending}
       />
     </div>

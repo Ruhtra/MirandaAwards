@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { createUserSchema } from "@/lib/validations/user"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { APIError } from "better-auth/api"
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { createUserSchema } from '@/lib/validations/user'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { APIError } from 'better-auth/api'
 
 export async function GET() {
   try {
@@ -11,12 +11,12 @@ export async function GET() {
       headers: await headers(),
     })
 
-    if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const users = await prisma.user.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         name: true,
@@ -29,8 +29,8 @@ export async function GET() {
 
     return NextResponse.json(users)
   } catch (error) {
-    console.error("[v0] Erro ao buscar usuários:", error)
-    return NextResponse.json({ error: "Erro ao buscar usuários" }, { status: 500 })
+    console.error('[v0] Erro ao buscar usuários:', error)
+    return NextResponse.json({ error: 'Erro ao buscar usuários' }, { status: 500 })
   }
 }
 
@@ -40,28 +40,27 @@ export async function POST(request: Request) {
       headers: await headers(),
     })
 
-    if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
-
 
     //valida os dados de entrada
     const body = await request.json()
     const validated = createUserSchema.safeParse(body)
 
     if (!validated.success) {
-      return NextResponse.json({ error: "Dados inválidos", details: validated.error.issues }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Dados inválidos', details: validated.error.issues },
+        { status: 400 },
+      )
     }
-
-
-
 
     const existingUser = await prisma.user.findUnique({
       where: { email: validated.data.email },
     })
 
     if (existingUser) {
-      return NextResponse.json({ error: "Este email já está em uso" }, { status: 400 })
+      return NextResponse.json({ error: 'Este email já está em uso' }, { status: 400 })
     }
 
     let newUser
@@ -72,30 +71,28 @@ export async function POST(request: Request) {
           email: validated.data.email,
           password: validated.data.password,
           name: validated.data.name,
-          role: "user",
+          role: 'user',
           data: {
             role: validated.data.role,
-          }
+          },
         },
-      });
+      })
     } catch (error) {
       if (error instanceof APIError) {
-        console.log('-------');
+        console.log('-------')
 
         console.log(error.message, error.status)
-        console.log('-------');
+        console.log('-------')
         throw error
         // return NextResponse.json({ error: error.message }, { status: 500 })
       }
     }
 
-
-    console.log("Usuário criado com sucesso")
-
+    console.log('Usuário criado com sucesso')
 
     return NextResponse.json(newUser, { status: 201 })
   } catch (error) {
-    console.error("[v0] Erro ao criar usuário:", error)
-    return NextResponse.json({ error: "Erro ao criar usuário" }, { status: 500 })
+    console.error('[v0] Erro ao criar usuário:', error)
+    return NextResponse.json({ error: 'Erro ao criar usuário' }, { status: 500 })
   }
 }

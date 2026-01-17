@@ -1,12 +1,19 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Search, SlidersHorizontal, X } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
+import { useState } from 'react'
+import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
 
 interface CategoryFiltersProps {
   search: string
@@ -34,7 +41,7 @@ export function CategoryFilters({
   return (
     <div className="flex gap-2">
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           placeholder="Buscar categorias..."
           value={search}
@@ -50,14 +57,14 @@ export function CategoryFilters({
             {activeFiltersCount > 0 && (
               <Badge
                 variant="default"
-                className="absolute -right-2 -top-2 size-5 rounded-full p-0 flex items-center justify-center text-xs"
+                className="absolute -top-2 -right-2 flex size-5 items-center justify-center rounded-full p-0 text-xs"
               >
                 {activeFiltersCount}
               </Badge>
             )}
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-full sm:max-w-md p-2">
+        <SheetContent className="w-full p-2 sm:max-w-md">
           <SheetHeader className="p-0">
             <SheetTitle>Filtros Avançados</SheetTitle>
             <SheetDescription>Refine sua busca por categorias</SheetDescription>
@@ -68,7 +75,7 @@ export function CategoryFilters({
               <Label>Quantidade de Jogos</Label>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="minGames" className="text-xs text-muted-foreground">
+                  <Label htmlFor="minGames" className="text-muted-foreground text-xs">
                     Mínimo
                   </Label>
                   <Input
@@ -81,7 +88,7 @@ export function CategoryFilters({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="maxGames" className="text-xs text-muted-foreground">
+                  <Label htmlFor="maxGames" className="text-muted-foreground text-xs">
                     Máximo
                   </Label>
                   <Input

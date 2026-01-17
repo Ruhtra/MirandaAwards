@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/prisma"
-import { type NextRequest, NextResponse } from "next/server"
-import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import type { Vote } from "@/prisma/generated/client"
+import { prisma } from '@/lib/prisma'
+import { type NextRequest, NextResponse } from 'next/server'
+import type { GameWithVotesAndCategoryDTO } from '@/lib/Dto/gameDTO'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import type { Vote } from '@/prisma/generated/client'
 
 export async function GET(
   request: NextRequest,
@@ -13,8 +13,8 @@ export async function GET(
       headers: await headers(),
     })
 
-    if (!session || (session.user.role !== "ADMIN" && session.user.role !== "USER")) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'USER')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const games = await prisma.game.findMany({
@@ -30,7 +30,7 @@ export async function GET(
         },
         votes: {
           where: {
-            userId: session.user.id
+            userId: session.user.id,
           },
           include: {
             category: true,
@@ -39,7 +39,7 @@ export async function GET(
       },
       where: {
         published: true,
-      }
+      },
     })
 
     const gamesDto = games.map((game) => {
@@ -66,11 +66,11 @@ export async function GET(
             description: category.description,
             vote: vote
               ? {
-                id: vote.id,
-                score: vote.score,
-                createdAt: vote.createdAt,
-                updatedAt: vote.updatedAt,
-              }
+                  id: vote.id,
+                  score: vote.score,
+                  createdAt: vote.createdAt,
+                  updatedAt: vote.updatedAt,
+                }
               : null,
           }
         }),
@@ -79,7 +79,7 @@ export async function GET(
 
     return NextResponse.json(gamesDto)
   } catch (error) {
-    console.error("[v0] Erro ao buscar games:", error)
-    return NextResponse.json({ error: "Erro ao buscar games" }, { status: 500 })
+    console.error('[v0] Erro ao buscar games:', error)
+    return NextResponse.json({ error: 'Erro ao buscar games' }, { status: 500 })
   }
 }

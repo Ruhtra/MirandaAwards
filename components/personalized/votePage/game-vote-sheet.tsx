@@ -1,17 +1,23 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Info, Save } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Slider } from "@/components/ui/slider"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { useToast } from "@/hooks/use-toast"
-import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { Info, Save } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Slider } from '@/components/ui/slider'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useToast } from '@/hooks/use-toast'
+import type { GameWithVotesAndCategoryDTO } from '@/lib/Dto/gameDTO'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { cn } from '@/lib/utils'
 
 interface GameVoteSheetProps {
   game: GameWithVotesAndCategoryDTO
@@ -40,10 +46,12 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
   })
 
   const saveVotesMutation = useMutation({
-    mutationFn: async (votesToSave: Array<{ categoryId: string; score: number; voted: boolean }>) => {
-      const response = await fetch("/api/votes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+    mutationFn: async (
+      votesToSave: Array<{ categoryId: string; score: number; voted: boolean }>,
+    ) => {
+      const response = await fetch('/api/votes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           gameId: game.id,
           votes: votesToSave,
@@ -51,16 +59,16 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
       })
 
       if (!response.ok) {
-        throw new Error("Erro ao salvar votos")
+        throw new Error('Erro ao salvar votos')
       }
 
       return response.json()
     },
     onMutate: async (votesToSave) => {
-      await queryClient.cancelQueries({ queryKey: ["gamesToUser"] })
-      const previousGames = queryClient.getQueryData(["gamesToUser"])
+      await queryClient.cancelQueries({ queryKey: ['gamesToUser'] })
+      const previousGames = queryClient.getQueryData(['gamesToUser'])
 
-      queryClient.setQueryData<GameWithVotesAndCategoryDTO[]>(["gamesToUser"], (old) => {
+      queryClient.setQueryData<GameWithVotesAndCategoryDTO[]>(['gamesToUser'], (old) => {
         if (!old) return old
         return old.map((g) => {
           if (g.id === game.id) {
@@ -73,11 +81,11 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                     ...cat,
                     vote: voteUpdate.voted
                       ? {
-                        id: cat.vote?.id || "temp-id",
-                        score: voteUpdate.score,
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                      }
+                          id: cat.vote?.id || 'temp-id',
+                          score: voteUpdate.score,
+                          createdAt: new Date(),
+                          updatedAt: new Date(),
+                        }
                       : undefined, // Remove vote if not voted
                   }
                 }
@@ -92,22 +100,22 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
       return { previousGames }
     },
     onError: (err, votesToSave, context) => {
-      queryClient.setQueryData(["gamesToUser"], context?.previousGames)
+      queryClient.setQueryData(['gamesToUser'], context?.previousGames)
       toast({
-        title: "Erro ao salvar",
-        description: "Ocorreu um erro ao salvar seus votos.",
-        variant: "destructive",
+        title: 'Erro ao salvar',
+        description: 'Ocorreu um erro ao salvar seus votos.',
+        variant: 'destructive',
       })
     },
     onSuccess: () => {
       toast({
-        title: "Votos salvos!",
-        description: "Seus votos foram salvos com sucesso.",
+        title: 'Votos salvos!',
+        description: 'Seus votos foram salvos com sucesso.',
       })
       onOpenChange(false)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["gamesToUser"] })
+      queryClient.invalidateQueries({ queryKey: ['gamesToUser'] })
     },
   })
 
@@ -146,13 +154,15 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col">
+      <SheetContent side="right" className="flex w-full flex-col p-0 sm:max-w-lg">
         {/* Header */}
-        <SheetHeader className="px-4 sm:px-6 pt-6 pb-4 border-b space-y-2">
+        <SheetHeader className="space-y-2 border-b px-4 pt-6 pb-4 sm:px-6">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 space-y-1">
-              <SheetTitle className="text-lg font-bold line-clamp-2">{game.name}</SheetTitle>
-              <SheetDescription className="text-xs">Vote de 0 a 10 ou marque como não votado</SheetDescription>
+              <SheetTitle className="line-clamp-2 text-lg font-bold">{game.name}</SheetTitle>
+              <SheetDescription className="text-xs">
+                Vote de 0 a 10 ou marque como não votado
+              </SheetDescription>
             </div>
           </div>
 
@@ -164,17 +174,19 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                 {votedCount}/{categories.length}
               </span>
             </div>
-            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="bg-muted h-1.5 overflow-hidden rounded-full">
               <div
-                className="h-full bg-primary transition-all duration-300"
-                style={{ width: `${categories.length > 0 ? (votedCount / categories.length) * 100 : 0}%` }}
+                className="bg-primary h-full transition-all duration-300"
+                style={{
+                  width: `${categories.length > 0 ? (votedCount / categories.length) * 100 : 0}%`,
+                }}
               />
             </div>
           </div>
         </SheetHeader>
 
         {/* Categories List - Scrollable */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
+        <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           <div className="space-y-3">
             {categories.map((category) => {
               const voteState = votes[category.id]
@@ -185,15 +197,20 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                 <div
                   key={category.id}
                   className={cn(
-                    "space-y-3 rounded-lg border p-3 transition-all duration-200",
-                    isVoted ? "border-primary/30 bg-primary/5 shadow-sm" : "border-border/50 bg-muted/30 opacity-75",
+                    'space-y-3 rounded-lg border p-3 transition-all duration-200',
+                    isVoted
+                      ? 'border-primary/30 bg-primary/5 shadow-sm'
+                      : 'border-border/50 bg-muted/30 opacity-75',
                   )}
                 >
                   {/* Category Header with Toggle */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <Label htmlFor={`voted-${category.id}`} className="text-sm font-semibold leading-tight">
+                        <Label
+                          htmlFor={`voted-${category.id}`}
+                          className="text-sm leading-tight font-semibold"
+                        >
                           {category.name}
                         </Label>
                         {category.description && (
@@ -214,7 +231,9 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                           </TooltipProvider>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground">{isVoted ? "Votado" : "Não votado"}</p>
+                      <p className="text-muted-foreground text-xs">
+                        {isVoted ? 'Votado' : 'Não votado'}
+                      </p>
                     </div>
 
                     <Switch
@@ -226,12 +245,17 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                   </div>
 
                   {/* Vote Score Section */}
-                  <div className={cn("space-y-2 transition-opacity", !isVoted && "opacity-40 pointer-events-none")}>
+                  <div
+                    className={cn(
+                      'space-y-2 transition-opacity',
+                      !isVoted && 'pointer-events-none opacity-40',
+                    )}
+                  >
                     {/* Score Display */}
                     <div className="flex items-center justify-center py-1">
-                      <div className="text-3xl font-bold tabular-nums tracking-tight">
+                      <div className="text-3xl font-bold tracking-tight tabular-nums">
                         {score}
-                        <span className="text-sm text-muted-foreground font-normal">/10</span>
+                        <span className="text-muted-foreground text-sm font-normal">/10</span>
                       </div>
                     </div>
 
@@ -248,7 +272,7 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
                     />
 
                     {/* Score Labels */}
-                    <div className="flex justify-between text-xs text-muted-foreground px-0.5">
+                    <div className="text-muted-foreground flex justify-between px-0.5 text-xs">
                       <span>0</span>
                       <span>5</span>
                       <span>10</span>
@@ -261,7 +285,7 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
         </div>
 
         {/* Footer with Save Button */}
-        <div className="border-t px-4 sm:px-6 py-3 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 border-t px-4 py-3 backdrop-blur sm:px-6">
           <Button
             onClick={handleSave}
             disabled={saveVotesMutation.isPending || categories.length === 0}
@@ -269,7 +293,7 @@ export function GameVoteSheet({ game, isOpen, onOpenChange }: GameVoteSheetProps
             size="lg"
           >
             <Save className="h-4 w-4" />
-            {saveVotesMutation.isPending ? "Salvando..." : "Salvar Votos"}
+            {saveVotesMutation.isPending ? 'Salvando...' : 'Salvar Votos'}
           </Button>
         </div>
       </SheetContent>

@@ -1,23 +1,23 @@
-import { Vote, Lock } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Vote, Lock } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function VotesPage() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Card className="w-full max-w-md glass-card">
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <Card className="glass-card w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="size-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative">
-              <Vote className="size-8 text-muted-foreground" />
-              <div className="absolute -top-2 -right-2 size-8 rounded-full bg-muted flex items-center justify-center">
-                <Lock className="size-4 text-muted-foreground" />
+          <div className="mb-4 flex justify-center">
+            <div className="from-primary/20 to-accent/20 relative flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br">
+              <Vote className="text-muted-foreground size-8" />
+              <div className="bg-muted absolute -top-2 -right-2 flex size-8 items-center justify-center rounded-full">
+                <Lock className="text-muted-foreground size-4" />
               </div>
             </div>
           </div>
           <CardTitle className="text-2xl">Gerenciamento de Votos</CardTitle>
           <CardDescription className="text-base">Em breve disponível</CardDescription>
         </CardHeader>
-        <CardContent className="text-center text-muted-foreground">
+        <CardContent className="text-muted-foreground text-center">
           <p>Esta funcionalidade está em desenvolvimento e estará disponível em breve.</p>
         </CardContent>
       </Card>

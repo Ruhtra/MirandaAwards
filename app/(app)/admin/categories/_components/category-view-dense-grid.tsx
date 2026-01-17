@@ -1,11 +1,16 @@
-"use client"
+'use client'
 
-import { MoreVertical, Pencil, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import type { CategoryWithGamesDTO } from "@/lib/Dto/categoryDTO"
-import { CategoryGamesSheet } from "./category-games-sheet"
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import type { CategoryWithGamesDTO } from '@/lib/Dto/categoryDTO'
+import { CategoryGamesSheet } from './category-games-sheet'
 
 interface CategoryViewDenseGridProps {
   categories: CategoryWithGamesDTO[]
@@ -13,18 +18,30 @@ interface CategoryViewDenseGridProps {
   onDelete: (category: CategoryWithGamesDTO) => void
 }
 
-export function CategoryViewDenseGrid({ categories, onEdit, onDelete }: CategoryViewDenseGridProps) {
+export function CategoryViewDenseGrid({
+  categories,
+  onEdit,
+  onDelete,
+}: CategoryViewDenseGridProps) {
   return (
-    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
       {categories.map((category) => (
-        <Card key={category.id} className="group hover:shadow-md transition-all hover:border-primary/50 py-0 h-[100px]">
-          <CardContent className="p-3 h-full flex flex-col justify-center">
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <div className="size-8 rounded bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
-                <span className="text-xs font-bold text-primary">{category.name.charAt(0).toUpperCase()}</span>
+        <Card
+          key={category.id}
+          className="group hover:border-primary/50 h-[100px] py-0 transition-all hover:shadow-md"
+        >
+          <CardContent className="flex h-full flex-col justify-center p-3">
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <div className="from-primary/20 to-accent/20 flex size-8 shrink-0 items-center justify-center rounded bg-gradient-to-br">
+                <span className="text-primary text-xs font-bold">
+                  {category.name.charAt(0).toUpperCase()}
+                </span>
               </div>
-              <div className="flex-1 min-h-0 flex flex-col justify-between">
-                <h3 className="font-semibold text-sm leading-tight line-clamp-2 mb-1" title={category.name}>
+              <div className="flex min-h-0 flex-1 flex-col justify-between">
+                <h3
+                  className="mb-1 line-clamp-2 text-sm leading-tight font-semibold"
+                  title={category.name}
+                >
                   {category.name}
                 </h3>
                 <div className="mt-auto">
@@ -37,7 +54,7 @@ export function CategoryViewDenseGrid({ categories, onEdit, onDelete }: Category
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-7 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity shrink-0"
+                    className="size-7 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
                   >
                     <MoreVertical className="size-3.5" />
                     <span className="sr-only">Ações</span>
@@ -55,8 +72,6 @@ export function CategoryViewDenseGrid({ categories, onEdit, onDelete }: Category
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
-
           </CardContent>
         </Card>
       ))}

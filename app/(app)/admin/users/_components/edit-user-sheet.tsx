@@ -1,18 +1,18 @@
-"use client"
+'use client'
 
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Form } from "@/components/ui/form"
-import { Spinner } from "@/components/ui/spinner"
-import { useToast } from "@/hooks/use-toast"
-import { updateUserSchema, type UpdateUserInput } from "@/lib/validations/user"
-import type { User } from "@/lib/types"
-import { UserFormFields } from "./user-form-fields"
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Form } from '@/components/ui/form'
+import { Spinner } from '@/components/ui/spinner'
+import { useToast } from '@/hooks/use-toast'
+import { updateUserSchema, type UpdateUserInput } from '@/lib/validations/user'
+import type { User } from '@/lib/types'
+import { UserFormFields } from './user-form-fields'
 
 interface EditUserSheetProps {
   open: boolean
@@ -27,19 +27,19 @@ export function EditUserSheet({ open, onOpenChange, userId }: EditUserSheetProps
   const form = useForm<UpdateUserInput>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
       password: null,
-      role: "USER",
+      role: 'USER',
     },
   })
 
   // Fetch user data
   const { data: user, isLoading: isLoadingUser } = useQuery<User>({
-    queryKey: ["user", userId],
+    queryKey: ['user', userId],
     queryFn: async () => {
       const response = await fetch(`/api/users/${userId}`)
-      if (!response.ok) throw new Error("Erro ao buscar usuário")
+      if (!response.ok) throw new Error('Erro ao buscar usuário')
       return response.json()
     },
     enabled: open && !!userId,
@@ -49,7 +49,7 @@ export function EditUserSheet({ open, onOpenChange, userId }: EditUserSheetProps
   useEffect(() => {
     if (!isLoadingUser && user) {
       form.reset({
-        name: user.name || "",
+        name: user.name || '',
         email: user.email,
         password: null,
         role: user.role,
@@ -65,30 +65,30 @@ export function EditUserSheet({ open, onOpenChange, userId }: EditUserSheetProps
       }
 
       const response = await fetch(`/api/users/${userId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Erro ao atualizar usuário")
+        throw new Error(error.error || 'Erro ao atualizar usuário')
       }
       return response.json()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-      queryClient.invalidateQueries({ queryKey: ["user", userId] })
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['user', userId] })
       toast({
-        title: "Usuário atualizado",
-        description: "O usuário foi atualizado com sucesso",
+        title: 'Usuário atualizado',
+        description: 'O usuário foi atualizado com sucesso',
       })
       onOpenChange(false)
     },
     onError: (error: Error) => {
       toast({
-        title: "Erro ao atualizar usuário",
+        title: 'Erro ao atualizar usuário',
         description: error.message,
-        variant: "destructive",
+        variant: 'destructive',
       })
     },
   })
@@ -97,18 +97,21 @@ export function EditUserSheet({ open, onOpenChange, userId }: EditUserSheetProps
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-lg overflow-y-auto p-0">
+      <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-lg">
         <SheetHeader className="px-5 pt-5 pb-4">
           <SheetTitle className="text-xl font-semibold">Editar Usuário</SheetTitle>
         </SheetHeader>
 
         {isLoadingUser ? (
           <div className="flex items-center justify-center py-12">
-            <Spinner className="size-8 text-primary" />
+            <Spinner className="text-primary size-8" />
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit((data) => updateMutation.mutate(data))} className="px-5 pb-5 space-y-4">
+            <form
+              onSubmit={form.handleSubmit((data) => updateMutation.mutate(data))}
+              className="space-y-4 px-5 pb-5"
+            >
               <UserFormFields
                 control={form.control}
                 avatarUrl={user?.avatar}
@@ -124,13 +127,13 @@ export function EditUserSheet({ open, onOpenChange, userId }: EditUserSheetProps
                   className="flex-1"
                   disabled={isLoading}
                 >
-                  <X className="size-4 mr-1.5" />
+                  <X className="mr-1.5 size-4" />
                   Cancelar
                 </Button>
                 <Button type="submit" className="flex-1" disabled={isLoading}>
                   {isLoading ? (
                     <>
-                      <Spinner className="size-4 mr-1.5" />
+                      <Spinner className="mr-1.5 size-4" />
                       Salvando...
                     </>
                   ) : (

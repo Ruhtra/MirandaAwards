@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { UserGameCard } from "./user-game-card"
-import { GameVoteSheet } from "./game-vote-sheet"
-import type { GameWithVotesAndCategoryDTO } from "@/lib/Dto/gameDTO"
+import { useState } from 'react'
+import { UserGameCard } from './user-game-card'
+import { GameVoteSheet } from './game-vote-sheet'
+import type { GameWithVotesAndCategoryDTO } from '@/lib/Dto/gameDTO'
 
 interface UserGameGridProps {
   games: GameWithVotesAndCategoryDTO[]
@@ -36,14 +36,28 @@ export function UserGameGrid({ games }: UserGameGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {games.map((game) => {
           const stats = getGameVoteStats(game)
-          return <UserGameCard key={game.id} game={game} {...stats} onClick={() => handleGameClick(game)} />
+          return (
+            <UserGameCard
+              key={game.id}
+              game={game}
+              {...stats}
+              onClick={() => handleGameClick(game)}
+            />
+          )
         })}
       </div>
 
-      {selectedGame && <GameVoteSheet game={selectedGame} isOpen={isSheetOpen} onOpenChange={setIsSheetOpen} />}
+      {selectedGame && (
+        <GameVoteSheet
+          key={selectedGame.id}
+          game={selectedGame}
+          isOpen={isSheetOpen}
+          onOpenChange={setIsSheetOpen}
+        />
+      )}
     </>
   )
 }

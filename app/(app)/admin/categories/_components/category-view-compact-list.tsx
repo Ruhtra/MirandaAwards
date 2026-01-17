@@ -1,10 +1,15 @@
-"use client"
+'use client'
 
-import { MoreVertical, Pencil, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import type { CategoryWithGamesDTO } from "@/lib/Dto/categoryDTO"
-import { CategoryGamesSheet } from "./category-games-sheet"
+import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import type { CategoryWithGamesDTO } from '@/lib/Dto/categoryDTO'
+import { CategoryGamesSheet } from './category-games-sheet'
 
 interface CategoryViewCompactListProps {
   categories: CategoryWithGamesDTO[]
@@ -12,7 +17,11 @@ interface CategoryViewCompactListProps {
   onDelete: (category: CategoryWithGamesDTO) => void
 }
 
-export function CategoryViewCompactList({ categories, onEdit, onDelete }: CategoryViewCompactListProps) {
+export function CategoryViewCompactList({
+  categories,
+  onEdit,
+  onDelete,
+}: CategoryViewCompactListProps) {
   return (
     <div className="space-y-2">
       {categories.map((category) => {
@@ -20,16 +29,18 @@ export function CategoryViewCompactList({ categories, onEdit, onDelete }: Catego
         return (
           <div
             key={category.id}
-            className="group flex items-center gap-3 p-4 rounded-lg border bg-card hover:bg-accent/50 hover:border-primary/50 transition-all"
+            className="group bg-card hover:bg-accent/50 hover:border-primary/50 flex items-center gap-3 rounded-lg border p-4 transition-all"
           >
             {/* Category Icon */}
-            <div className="size-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
-              <span className="text-sm font-bold text-primary">{category.name.charAt(0).toUpperCase()}</span>
+            <div className="from-primary/20 to-accent/20 flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br">
+              <span className="text-primary text-sm font-bold">
+                {category.name.charAt(0).toUpperCase()}
+              </span>
             </div>
 
             {/* Category Name - Flexible */}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm leading-tight line-clamp-1">{category.name}</h3>
+            <div className="min-w-0 flex-1">
+              <h3 className="line-clamp-1 text-sm leading-tight font-semibold">{category.name}</h3>
             </div>
 
             {/* Games Count Badge */}
@@ -43,7 +54,7 @@ export function CategoryViewCompactList({ categories, onEdit, onDelete }: Catego
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="size-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity shrink-0"
+                  className="size-8 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
                 >
                   <MoreVertical className="size-4" />
                   <span className="sr-only">Ações</span>

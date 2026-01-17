@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 
 interface CategoryFormFieldsProps {
-  name: string;
-  description?: string;
-  onNameChange: (name: string) => void;
-  onDescriptionChange: (description: string) => void;
+  name: string
+  description?: string
+  onNameChange: (name: string) => void
+  onDescriptionChange: (description: string) => void
 }
 
 export function CategoryFormFields({
@@ -38,5 +38,5 @@ export function CategoryFormFields({
         maxLength={250}
       />
     </div>
-  );
+  )
 }

@@ -69,10 +69,10 @@ export default function LoginPage() {
               description: 'Você foi autenticado com sucesso!',
             })
 
-            if (role === 'ADMIN') {
-              await router.push(DEFAULT_LOGIN_REDIRECT.ADMIN)
+            if (role === 'admin') {
+              await router.push(DEFAULT_LOGIN_REDIRECT.admin)
             } else if (role === 'USER') {
-              await router.push(DEFAULT_LOGIN_REDIRECT.USER)
+              await router.push(DEFAULT_LOGIN_REDIRECT.user)
             }
           },
         },

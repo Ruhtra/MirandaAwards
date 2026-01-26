@@ -42,9 +42,9 @@ export async function proxy(request: NextRequest) {
   //TO-DO: adicionar redirect de /user para /user/dashboard
 
   // Redireciona para 404 se a rota é de admin e o usuário não tem permissão adequada
-  if (isAdminRoute && role !== Role.ADMIN) return Response.redirect(new URL('/404', nextUrl))
+  if (isAdminRoute && role !== Role.admin) return Response.redirect(new URL('/404', nextUrl))
 
-  if (isUserRoute && role !== Role.USER) return Response.redirect(new URL('/404', nextUrl))
+  if (isUserRoute && role !== Role.user) return Response.redirect(new URL('/404', nextUrl))
 
   return NextResponse.next()
 }

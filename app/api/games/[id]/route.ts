@@ -5,20 +5,19 @@ import { updateGameSchema } from '@/lib/validations/game'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { del } from '@vercel/blob'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ): Promise<NextResponse<GameWithCategoriesDTO | { error: string }>> {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('get', 'Game')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params
@@ -54,12 +53,12 @@ export async function GET(
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('update', 'Game')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params
@@ -142,12 +141,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('delete', 'Game')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params

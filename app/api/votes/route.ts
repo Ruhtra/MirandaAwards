@@ -3,57 +3,58 @@ import { prisma } from '@/lib/prisma'
 import { bulkVoteSchema } from '@/lib/validations/vote'
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
-export async function GET(request: NextRequest) {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+// export async function GET(request: NextRequest) {
+//   try {
+//     const session = await auth.api.getSession({ headers: await headers() })
+//     if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'USER')) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
+//     const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+//     if (cannot('list', 'Vote')) {
+//       return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
+//     }
 
-    const searchParams = request.nextUrl.searchParams
-    const gameId = searchParams.get('gameId')
+//     const searchParams = request.nextUrl.searchParams
+//     const gameId = searchParams.get('gameId')
 
-    if (gameId) {
-      const votes = await prisma.vote.findMany({
-        where: {
-          userId: session.user.id,
-          gameId,
-        },
-        include: {
-          category: true,
-        },
-      })
+//     if (gameId) {
+//       const votes = await prisma.vote.findMany({
+//         where: {
+//           userId: session.user.id,
+//           gameId,
+//         },
+//         include: {
+//           category: true,
+//         },
+//       })
 
-      return NextResponse.json(votes)
-    }
+//       return NextResponse.json(votes)
+//     }
 
-    const votes = await prisma.vote.findMany({
-      where: { userId: session.user.id },
-      include: {
-        category: true,
-        game: true,
-      },
-    })
+//     const votes = await prisma.vote.findMany({
+//       where: { userId: session.user.id },
+//       include: {
+//         category: true,
+//         game: true,
+//       },
+//     })
 
-    return NextResponse.json(votes)
-  } catch (error) {
-    console.error('[v0] Error fetching votes:', error)
-    return NextResponse.json({ error: 'Erro ao buscar votos' }, { status: 500 })
-  }
-}
+//     return NextResponse.json(votes)
+//   } catch (error) {
+//     console.error('[v0] Error fetching votes:', error)
+//     return NextResponse.json({ error: 'Erro ao buscar votos' }, { status: 500 })
+//   }
+// }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'USER')) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('create', 'Vote')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const body = await request.json()

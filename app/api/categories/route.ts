@@ -6,9 +6,18 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { createCategorySchema } from '@/lib/validations/category'
 import { randomUUID } from 'crypto'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
 export async function GET(): Promise<NextResponse<CategoryDTO[] | { error: string }>> {
   try {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
+
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('list', 'Category')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
+    }
+
     const categories = await prisma.category.findMany({
       orderBy: {
         name: 'asc',
@@ -32,12 +41,12 @@ export async function POST(
   request: Request,
 ): Promise<NextResponse<CategoryDTO | { error: string }>> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('create', 'Category')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     //valida os dados de entrada
@@ -69,7 +78,7 @@ export async function POST(
 
     return NextResponse.json(newCategory, { status: 201 })
   } catch (error) {
-    console.error('[v0] Erro ao criar game:', error)
-    return NextResponse.json({ error: 'Erro ao criar game' }, { status: 500 })
+    console.error('[v0] Erro ao criar categoria:', error)
+    return NextResponse.json({ error: 'Erro ao criar categoria' }, { status: 500 })
   }
 }

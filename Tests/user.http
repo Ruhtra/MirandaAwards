@@ -1,0 +1,30 @@
+###
+get http://localhost:3000/api/users
+
+###
+get http://localhost:3000/api/users/{}
+
+###
+post http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "email": "teste@gmail.com",
+  "password": "teste123",
+  "name": "Teste",
+  "role": "user"
+}
+
+###
+PATCH  http://localhost:3000/api/users/9fcBbm1UdOE7TcJi9D8aboyrpOKgsAOR
+Content-Type: application/json
+
+{
+  "name": "Teste novoo123",
+  "role": "user",
+  "password": "novoo123"
+}
+
+
+###
+DELETE http://localhost:3000/api/users/{}

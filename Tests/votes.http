@@ -1,0 +1,30 @@
+###
+get http://localhost:3000/api/votes
+
+# ### 
+# get http://localhost:3000/api/categories/ba2a699b-8a24-4875-a617-966c74350506
+
+# ###
+# post http://localhost:3000/api/categories
+# Content-Type: application/json
+
+# {
+#   "name": "testeaut"
+# }
+
+# ###
+# PATCH  http://localhost:3000/api/categories/9049a2cc-8ee9-4b51-ad40-7a46a485a85d
+# Content-Type: application/json
+
+# {
+#   "description": "Teste desc"
+# }
+
+
+# ###
+# DELETE http://localhost:3000/api/categories/9049a2cc-8ee9-4b51-ad40-7a46a485a85d
+
+
+
+# ###
+# get http://localhost:3000/api/categories/withGames

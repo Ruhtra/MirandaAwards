@@ -54,8 +54,8 @@ export function UserFilters({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os tipos</SelectItem>
-            <SelectItem value="ADMIN">Administrador</SelectItem>
-            <SelectItem value="USER">Usuário</SelectItem>
+            <SelectItem value="admin">Administrador</SelectItem>
+            <SelectItem value="user">Usuário</SelectItem>
           </SelectContent>
         </Select>
 
@@ -112,8 +112,8 @@ export function UserFilters({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">Todos os tipos</SelectItem>
-                      <SelectItem value="ADMIN">Administrador</SelectItem>
-                      <SelectItem value="USER">Usuário</SelectItem>
+                      <SelectItem value="admin">Administrador</SelectItem>
+                      <SelectItem value="user">Usuário</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

@@ -4,17 +4,18 @@ import type { GameWithVotesAndCategoryDTO } from '@/lib/Dto/gameDTO'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import type { Vote } from '@/prisma/generated/client'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
-export async function GET(
-  request: NextRequest,
-): Promise<NextResponse<GameWithVotesAndCategoryDTO[] | { error: string }>> {
+export async function GET(): Promise<
+  NextResponse<GameWithVotesAndCategoryDTO[] | { error: string }>
+> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'USER')) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('list', 'GameWithVote')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const games = await prisma.game.findMany({

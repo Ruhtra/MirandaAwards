@@ -1,5 +1,9 @@
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
+import { auth } from '@/lib/auth'
 import { CategoryDTO } from '@/lib/Dto/gameDTO'
 import { prisma } from '@/lib/prisma'
+import { updateCategorySchema } from '@/lib/validations/category'
+import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(
@@ -7,14 +11,12 @@ export async function GET(
   { params }: { params: { id: string } },
 ): Promise<NextResponse<CategoryDTO | { error: string }>> {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('get', 'Category')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params
@@ -48,28 +50,28 @@ export async function GET(
 }
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('update', 'Category')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params
-
-    if (!id) {
-      return NextResponse.json({ error: 'ID da category é obrigatório' }, { status: 400 })
-    }
+    if (!id) return NextResponse.json({ error: 'ID da category é obrigatório' }, { status: 400 })
 
     const body = await request.json()
-    const { name, description } = body
+    const validated = updateCategorySchema.safeParse(body)
 
-    if (!name) {
-      return NextResponse.json({ error: 'Nome da category é obrigatório' }, { status: 400 })
+    if (!validated.success) {
+      return NextResponse.json(
+        { error: 'Dados inválidos', details: validated.error.issues },
+        { status: 400 },
+      )
     }
+
+    const { name, description } = validated.data
 
     const category = await prisma.category.update({
       where: { id },
@@ -93,14 +95,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('delete', 'Category')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const { id } = await params

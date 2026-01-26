@@ -1,0 +1,26 @@
+### LOGIN — Better Auth
+POST http://localhost:3000/api/auth/sign-in/email
+Content-Type: application/json
+
+{
+  "email": "ruhtra@gmail.com",
+  "password": "admin123"
+}
+
+### LOGIN — Better Auth
+POST http://localhost:3000/api/auth/sign-in/email
+Content-Type: application/json
+
+{
+  "email": "user@gmail.com",
+  "password": "usuario123"
+}
+
+
+### LOGOUT — Better Auth
+POST http://localhost:3000/api/auth/sign-out
+Content-Type: application/json
+Origin: http://localhost:3000
+
+{}
+

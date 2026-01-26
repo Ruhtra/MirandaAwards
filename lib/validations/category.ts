@@ -14,11 +14,11 @@ export const createCategorySchema = z.object({
 })
 
 export const updateCategorySchema = z.object({
-  id: z.string(),
   name: z
     .string()
     .min(2, 'Nome deve ter pelo menos 2 caracteres')
-    .max(50, 'Nome deve ter no máximo 50 caracteres'),
+    .max(50, 'Nome deve ter no máximo 50 caracteres')
+    .optional(),
   description: z
     .string()
     .min(10, 'Descrição deve ter pelo menos 10 caracteres')

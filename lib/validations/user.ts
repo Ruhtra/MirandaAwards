@@ -20,7 +20,7 @@ export const createUserSchema = z.object({
     .max(100, {
       message: 'A senha deve ter no máximo 100 caracteres',
     }),
-  role: z.enum(['USER', 'ADMIN']).default('USER'),
+  role: z.enum(['user', 'admin']).default('user'),
 })
 
 export const updateUserSchema = z.object({
@@ -49,7 +49,7 @@ export const updateUserSchema = z.object({
     })
     .optional()
     .nullable(),
-  role: z.enum(['USER', 'ADMIN']).optional(),
+  role: z.enum(['user', 'admin']).optional(),
 })
 
 export const loginSchema = z.object({

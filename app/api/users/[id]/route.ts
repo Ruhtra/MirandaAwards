@@ -4,25 +4,25 @@ import { updateUserSchema } from '@/lib/validations/user'
 // import bcrypt from "bcrypt"
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
+import { getUserPermision, mapUserToAuth } from '@/app/permission/utils/getUserPermission'
+import { User } from '@/lib/types'
+import { userSchema, userSubject } from '@/app/permission/subjects/UserSubject'
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
     const { id } = await params
     if (!id) {
       return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
     }
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('get', { kind: 'User', id })) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
+    }
 
-    const user = await prisma.user.findUnique({
+    const user: User | undefined | null = await prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
@@ -47,17 +47,17 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
     const { id } = await params
     if (!id) {
       return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
+    }
+
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('update', { kind: 'User', id })) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const body = await request.json()
@@ -72,39 +72,26 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const { name, email, password, role } = validated.data
 
-    // const { password: oldpassword } = await prisma.account.findFirstOrThrow({
-    //   where: { userId: id, providerId: "credential" },
-    //   select: {
-    //     password: true
-    //   },
-    // })
-
-    // const user = await prisma.user.update({
-    //   where: { id },
-    //   data: {
-
-    //   },
-    //   select: {
-    //     id: true,
-    //     name: true,
-    //     email: true,
-    //     role: true,
-    //     createdAt: true,
-    //     updatedAt: true,
-    //   },
-    // })
-
     var user = await auth.api.adminUpdateUser({
       body: {
         userId: id,
         data: {
-          name: name,
-          password: password,
-          email: email,
+          ...(name && { name }),
+          ...(email && { email }),
+          ...(role && { role }),
         },
       },
       headers: await headers(),
     })
+
+    if (password)
+      auth.api.setUserPassword({
+        body: {
+          newPassword: password || '',
+          userId: id,
+        },
+        headers: await headers(),
+      })
 
     return NextResponse.json(user)
   } catch (error: any) {
@@ -116,19 +103,17 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const session = {
-      user: {
-        role: 'ADMIN',
-      },
-    }
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
     const { id } = await params
     if (!id) {
       return NextResponse.json({ error: 'ID do usuário é obrigatório' }, { status: 400 })
+    }
+
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('delete', 'User')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     await prisma.user.delete({

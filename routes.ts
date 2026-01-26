@@ -24,6 +24,6 @@ export const adminRoutes = [
 export const apiAuthPrefix = '/api/auth'
 
 export const DEFAULT_LOGIN_REDIRECT: Record<Role, string> = {
-  [Role.ADMIN]: '/admin/users',
-  [Role.USER]: '/user/dashboard',
+  [Role.admin]: '/admin/users',
+  [Role.user]: '/user/dashboard',
 }

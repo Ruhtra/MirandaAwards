@@ -4,15 +4,16 @@ import { createUserSchema } from '@/lib/validations/user'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { APIError } from 'better-auth/api'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
 export async function GET() {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('list', 'User')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const users = await prisma.user.findMany({
@@ -36,12 +37,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('create', 'User')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     //valida os dados de entrada
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
           email: validated.data.email,
           password: validated.data.password,
           name: validated.data.name,
-          role: 'user',
+          role: validated.data.role,
           data: {
             role: validated.data.role,
           },

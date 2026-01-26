@@ -142,11 +142,11 @@ export function UserList({ onEditUser, searchQuery, roleFilter }: UserListProps)
                   </div>
 
                   <Badge
-                    variant={user.role === 'ADMIN' ? 'default' : 'secondary'}
+                    variant={user.role === 'admin' ? 'default' : 'secondary'}
                     className="flex-shrink-0 gap-1"
                   >
                     <Shield className="size-3" />
-                    {user.role === 'ADMIN' ? 'Admin' : 'User'}
+                    {user.role === 'admin' ? 'Admin' : 'User'}
                   </Badge>
 
                   <DropdownMenu>

@@ -8,15 +8,16 @@ import { GameWithCategoriesDTO } from '@/lib/Dto/gameDTO'
 import { Game } from '@/prisma/generated/client'
 import { createGameSchema } from '@/lib/validations/game'
 import { randomUUID } from 'crypto'
+import { getUserPermision } from '@/app/permission/utils/getUserPermission'
 
 export async function GET(): Promise<NextResponse<GameWithCategoriesDTO[] | { error: string }>> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('list', 'Game')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     const games = await prisma.game.findMany({
@@ -49,12 +50,12 @@ export async function GET(): Promise<NextResponse<GameWithCategoriesDTO[] | { er
 
 export async function POST(request: Request): Promise<NextResponse<Game | { error: string }>> {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await auth.api.getSession({ headers: await headers() })
+    if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    const { can, cannot } = getUserPermision(session.user.id, session.user.role)
+    if (cannot('create', 'Game')) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 })
     }
 
     //valida os dados de entrada

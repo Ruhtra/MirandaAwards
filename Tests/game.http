@@ -1,0 +1,30 @@
+###
+get http://localhost:3000/api/games
+
+### 
+get http://localhost:3000/api/games/8dfe34a1-3df7-454f-9cc6-a1ded87a4826
+
+# ###
+# post http://localhost:3000/api/games
+# Content-Type: application/json
+
+# {
+#   "name": "testeaut"
+# }
+
+# ###
+# PATCH  http://localhost:3000/api/categories/9049a2cc-8ee9-4b51-ad40-7a46a485a85d
+# Content-Type: application/json
+
+# {
+#   "description": "Teste desc"
+# }
+
+
+# ###
+# DELETE http://localhost:3000/api/categories/9049a2cc-8ee9-4b51-ad40-7a46a485a85d
+
+
+
+###
+get http://localhost:3000/api/games/withVote

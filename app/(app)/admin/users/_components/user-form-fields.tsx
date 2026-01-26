@@ -126,8 +126,8 @@ export function UserFormFields({
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="USER">Usuário</SelectItem>
-                <SelectItem value="ADMIN">Administrador</SelectItem>
+                <SelectItem value="user">Usuário</SelectItem>
+                <SelectItem value="admin">Administrador</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />

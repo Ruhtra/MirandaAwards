@@ -14,7 +14,7 @@ export default function GamesPage() {
   const { data: games, isLoading } = useQuery<GameWithVotesAndCategoryDTO[]>({
     queryKey: ['gamesToUser'],
     queryFn: async () => {
-      const response = await fetch('/api/WithVoteByuser')
+      const response = await fetch('/api/games/withVote')
       if (!response.ok) throw new Error('Erro ao buscar jogos')
       return response.json()
     },

@@ -12,6 +12,7 @@ import { z } from 'zod'
 export const gameSubject = z.tuple([
   z.union([
     z.literal('manage'),
+    z.literal('upload'),
     z.literal('get'),
     z.literal('list'),
     z.literal('create'),
